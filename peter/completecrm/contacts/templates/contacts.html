@@ -1,0 +1,461 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load paginate %}
+{% load thumbnail %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<style>
+  .form-group label {
+    font-weight: 550;
+    color: #6c757d;
+
+  }
+  .fa-sort {
+    color: #bdbfc2 !important;
+  }
+  #sorttable_sortfwdind{
+    color:white !important;
+  }
+  #sorttable_sortrevind{
+    color:white !important;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<!-- main_container starts here -->
+<div class="main_container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'common:casedashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active">{% if case_obj %}Edit{% else %}Contacts{% endif %}</li>
+    </ol>
+  </nav>
+  <!-- heading_create starts here -->
+  <div class="row marl">
+    <div class="col-lg-12 text-right">
+      <span class="d-inline"><a class="primary_btn" href="{% url 'contacts:add_contact'%}"><i class="fa fa-plus"></i>
+          Add New Contact</a></span>
+    </div>
+  </div>
+  <div class="filter_row list_filter_row row marl">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <form id="contacts_filter" action="" method="POST">
+            <div class="card-body">
+              <div class="card-title">Filters</div>
+              <div class="row marl">
+                <div class="filter_col col-md-2">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">NAME</label>
+                    <input type="text" class="form-control" placeholder="First Name" name="first_name"
+                      value="{{request.POST.first_name}}">
+                  </div>
+                </div>
+                <div class="filter_col col-md-2">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Mobile</label>
+                    <input type="text" class="form-control" placeholder="Phone" name="phone2"
+                      value="{{request.POST.phone2}}">
+                  </div>
+                </div>
+                <div class="filter_col col-md-2">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email</label>
+                    <input type="text" class="form-control" placeholder="Email" name="email"
+                      value="{{request.POST.email}}">
+                  </div>
+                </div>
+                <!-- <div class="filter_col col-md-2">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Assigned To</label>
+                    <select class="assigned_users form-control" name="assigned_to" multiple="multiple">
+                      {% for user in users %}
+                      <option value="{{user.id}}" {% if user.id in assignedto_list %} selected="" {% endif %}>
+                        {{user.email}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div> -->
+                <div class="filter_col text-center col-2">
+                  <div class="form-group buttons_row">
+                    <button class="btn btn-success" style="font-size: 16px;" type="submit">Search</button>
+                    <a href="{% url 'contacts:list' %}" class="btn btn-danger">Clear</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- heading_create ends here -->
+  <!-- filter_row starts here -->
+  <div class="table_container_row row marl ">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title text-right">
+
+            <span class="float-left">Contacts</span>
+
+            <span class="filter_toggle">
+              <a href="#" class="primary_btn"><i class="fas fa-filter"></i> Filter</a>
+            </span>
+
+          </div>
+          <div class="table-responsive">
+            <table class="sortable table">
+              <thead>
+                {% if contact_obj_list|length > 0 %}
+                <tr>
+                  <th width="5%">S.No<i class="fa fa-fw fa-sort"></i></th>
+                  <th width="15%">First Name <i class="fa fa-fw fa-sort"></i></th>
+                  <th width="13%">Last Name<i class="fa fa-fw fa-sort"></i></th>
+                  <!-- <th width="20%">Assigned To</th> -->
+                  <!-- <th width="15%">Phone</th> -->
+                  <th width="17%">Mobile<i class="fa fa-fw fa-sort"></i></th>
+                  <th width="15%">Email<i class="fa fa-fw fa-sort"></i></th>
+                  <th width="20%">Created On<i class="fa fa-fw fa-sort"></i></th>
+                  <th width="20%">Actions<i class="fa fa-fw fa-sort"></i></th>
+                </tr>
+                {% endif %}
+              </thead>
+              <tbody>
+                {% if per_page %}
+                {% paginate per_page contact_obj_list %}
+                {% else%}
+                {% paginate 10 contact_obj_list %}
+                {% endif %}
+                {% for contact in contact_obj_list %}
+                <tr style="text-align:center;">
+                  <td scope="row">{{ forloop.counter}}</td>
+                  <td><a href="#" data-toggle="modal" style="color:#454545;font-size:1rem;"
+                      data-target="#exampleModalView_contact{{contact.id}}">{{contact.first_name}}
+                    </a></td>
+                  <td>
+                      {{contact.last_name}}
+                  </td>
+                  <!-- <td>
+                    {% with contact_users=contact.get_team_and_assigned_users %}
+                    {% for user in contact_users %}
+                    {% if user.profile_pic %}
+                    {% thumbnail user.profile_pic "40x40" crop="center" as im %}
+                    <a href="{% url 'common:view_user' user.id %}">
+                      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" title="{{ user.email }}">
+                    </a>
+                    {% endthumbnail %}
+                    {% else %}
+                    <a href="{% url 'common:view_user' user.id %}">
+                      <img src="{% static 'images/user.png' %}" title="{{ user.email }}" width="40" height="40">
+                    </a>
+                    {% endif %}
+                    {% empty %}
+                    None
+                    {% endfor %}
+                    {% endwith %}
+                  </td> -->
+                  <!-- <td>
+                    {% if contact.phone1 %}
+                    {{contact.phone1}}
+                    {% else %}
+                    Not Specified
+                    {% endif %}
+                  </td> -->
+                  <td>
+                    {% if contact.phone2 %}
+                    {{contact.phone2}}
+                    {% else %}
+                    Not Specified
+                    {% endif %}
+                  </td>
+                  <td>  {% if contact.email %}
+                    {{contact.email}}
+                    {% else %}
+                    Not Specified
+                    {% endif %}</td>
+                  <td title="{{contact.created_on}}">{{contact.created_on|date:"M d,Y H:i:s"}}</td>
+                  <td class="actions">
+                    <a a href="{% url 'contacts:view_contact' contact.id %}" class="btn btn-info view" title="View" ><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'contacts:edit_contact' contact.id%}" class="btn btn-success edit" title="Edit"><i
+                        class="fas fa-pencil-alt"></i></a>
+                    {% if request.user.role == "ADMIN" or request.user.is_superuser %}
+                    <a href="{% url 'contacts:remove_contact' contact.id %}"
+                      class="btn btn-danger delete remove_account" title="Delete" ><i class="fas fa-trash-alt"></i></a>
+                    {% endif %}
+
+                  </a> 
+                  </td>
+                </tr>
+                {% endfor%}
+              </tbody>
+            </table>
+          </div>
+          {%ifequal contact_obj_list|length 0 %}
+          <h6 class="text-center">No Contact Records Found</h6>
+          {%endifequal%}
+          <div class="marl row text-center">
+            {% show_pages %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <br clear="all">
+  </div>
+  <!-- filter_row ends here -->
+</div>
+<!-- main_container ends here -->
+
+
+
+{% for contact_record in contact_obj_list %}
+
+
+<div class="modal fade janani" id="exampleModalView_contact{{contact_record.id}}" data-value={{contact_record.id}} tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="color:#007bff" id="exampleModalLongTitle">Quick View Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+
+          <div class="filter_col" id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="contact_field_label" for="id_name" data-name="name">First Name</label></div>
+              <div class="col-md-7">
+                {% if contact_record.first_name %}
+                <div class="contact_field" id="contact_name" data-name="name">{{ contact_record.first_name }}
+                </div>
+                {% else %}
+                <div class="col-md-7"><div class="contact_field">Not Specified</div></div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="filter_col" id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="contact_field_label" for="id_name" data-name="name">Last Name</label></div>
+              <div class="col-md-7">
+                {% if contact_record.last_name %}
+                <div class="contact_field" id="contact_name" data-name="name">
+                {{ contact_record.last_name }}</div>
+                {% else %}
+                <div class="col-md-7"><div class="contact_field">Not Specified</div></div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="contact_field_label" for="id_email" data-name="name">Email Address</label></div>
+              <div class="col-md-7">
+                {% if contact_record.email %}
+                <div class="contact_field" id="contact_email" data-name="name">{{ contact_record.email }}</div>
+                {% else %}
+                <div class="contact_field">Not Specified</div>
+                {% endif %}
+              
+              </div>
+            </div>
+          </div>
+
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5">
+                <label class="contact_field_label" for="id_phone" data-name="name">Mobile Number</label>
+              </div>
+                
+              <div class="col-md-7">
+                {% if contact_record.phone2 %}
+                <div class="contact_field" id="contact_phone2" data-name="name">{{ contact_record.phone2 }}</div>
+              {% else %}
+              <div class="contact_field">Not Specified</div>
+              {% endif %}
+              </div>
+            </div>
+          </div>
+
+          
+
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="contact_field_label" for="id_phone" data-name="name">Phone Number</label></div>
+              <div class="col-md-7">
+                {% if contact_record.phone1 %}
+                <div class="contact_field" id="contact_phone" data-name="name">{{ contact_record.phone1 }}</div>
+                {% else %}
+                <div class="contact_field">Not Specified</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="contact_field_label" for="id_company_name" data-name="name">Created by</label></div>
+              <div class="col-md-7"><div class="contact_field" id="contact_company_name" data-name="name">{{ contact_record.created_by }}</div></div>
+            </div>
+          </div>
+
+         
+
+
+          
+
+          
+        
+        
+          <!-- <div class="filter_col">
+            <div class="row form-group">
+              {% if contact_record.address.address_line or contact_record.address.street or contact_record.address.city or  contact_record.address.state or contact_record.address.postcode or contact_record.address.country %}
+              <div class="col-md-5"><label class="contact_field_label" for="id_address" data-name="name">Billing Address</label></div>
+              <div class="col-md-7"><div class="contact_field" id="contact_address" data-name="name">
+                {{contact_record.address.get_complete_address}}
+              </div>
+              {% else %}
+              <div class="contact_field">Not Specified</div>
+            
+            </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="contact_field_label" for="id_company_name" data-name="name">Company Name</label></div>
+              <div class="col-md-7">
+                {% if contact_record.company_name %}
+                <div class="contact_field" id="contact_company_name" data-name="name">{{ contact_record.company_name }}</div>
+                {% else %}
+                <div class="contact_field">Not Specified</div>
+                {% endif %}
+              </div>
+            </div>
+          </div> -->
+
+          
+          
+          <!-- <table class="table" id="list_table_json">
+            <tr>
+              <th>Case NO</th>
+              <th>Case Staus</th>
+              <th>Case Type</th>
+              <th>Case Creation_date</th>
+            </tr>
+           
+            
+          </table> -->
+      
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+
+
+
+{%endblock%}
+{% block js_block %}
+<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.assigned_users').select2();
+    $(".filter_toggle").click(function () {
+      $(".list_filter_row").toggle();
+    });
+  });
+
+  search = "{{search}}"
+
+  if (search == 'True') {
+    $(".list_filter_row").show();
+  }
+  $('.delete').click(function (e) {
+    e.preventDefault()
+    url = $(this).attr('href')
+    if (!confirm('Are you sure you want to delete?'))
+      return;
+    window.location = $(this).attr('href')
+  });
+
+  $("a[rel='page']").click(function (e) {
+    e.preventDefault();
+    $('#contacts_filter').attr("action", $(this).attr("href"));
+    $('#contacts_filter').submit();
+  });
+
+    
+</script>
+<script>
+
+function ShowModal(elem){
+    var dataId = $(elem).data("id");
+    // alert(dataId);
+    console.log("data",dataId)
+    $.ajax({
+            url:"/contacts/myfunc/",
+            type: 'POST',
+                    async: true,
+                    data: {'text': dataId},
+                    success: function(data){
+                      console.log('case_type',data.case_type)
+                      console.log('case_status',data.case_status)
+                      console.log('case_number',data.case_number)
+                      console.log('case_date',data.case_creation_date)
+                      var event_data = '';
+                      event_data += '<tr>';
+                 event_data += '<td>'+data.case_number+'</td>';
+                  event_data += '<td>'+data.case_status+'</td>';
+                 event_data += '<td>'+data.case_type+'</td>';
+                 event_data += '<td>'+data.case_creation_date+'</td>';
+                event_data += '</tr>';
+            // $.each(data, function(index, value){
+            //     console.log('value-----',value);
+            //     event_data += '<tr>';
+            //     event_data += '<td>'+value+'</td>';
+            //     // event_data += '<td>'+value+'</td>';
+            //     // event_data += '<td>'+value+'</td>';
+            //     // event_data += '<td>'+value+'</td>';
+            //     event_data += '</tr>';
+            // });
+            console.log('event_data----',event_data)
+            $("#list_table_json").append(event_data); 
+                    }
+                     
+        });
+}
+//    $(".janani").on('click',function(){
+//         var cid = $(this).attr('data-value');
+//         console.log(cid,"CID")
+//         $.ajax({
+//             type:"Get",
+//             url:"/contacts/",
+//             data:{
+//                 "cid":cid
+//             },
+//             dataType:"json",
+//             headers: {'X-CSRFToken': '{{ csrf_token }}'},
+//             // success: function (data) {
+//             //     $('#subcategory').html(data);
+//             //          }
+//         });
+//     });
+</script>
+<script>
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+{% endblock js_block %}

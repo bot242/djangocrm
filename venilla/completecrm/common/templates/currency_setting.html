@@ -1,0 +1,83 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock extralinks %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'common:api_settings' %}">Settings</a></li>
+      <li class="breadcrumb-item active">Currency Settings</li>
+    </ol>
+  </nav>
+  {% endblock %}
+{% block content %}
+
+<!-- main_container starts here -->
+<div class="main_container">
+    <form id="add_form" method="POST" action="" novalidate>
+        <div class="overview_form_block row marl justify-content-center">
+          <div class="col-md-5 mt-5" >
+            <div class="card">
+              <div class="card-body">
+                <div class="row marl no-gutters">
+                  <div class="col-md-12 mt-4 mb-5">
+                    <div class="filter_col col-md-12">
+                      <div class="row form-group">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                            <label>Currency</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select name="currency" id="currency_id" class="form-control">
+                                <option>Select Currency</option>
+                                {% for currency in currencies %}
+                                <option value="{{currency.0}}" {% if cur == currency.0 %} selected=""
+                                {% endif %}>{{currency.1}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12">
+                    <div class="row marl buttons_row text-center form_btn_row">
+                        {% if cur == None %}
+                        <button class="btn btn-success save" type="submit">Save</button>
+                        {% else %}
+                        <button class="btn btn-success save" type="submit">Update</button>
+                      {% endif %}
+                      <a href="{% url 'common:api_settings' %}" class="btn btn-danger clear">Cancel</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="save_new_form" name="savenewform">
+        </div>
+      </form>
+  
+  
+
+ 
+
+
+  
+
+ 
+
+  
+
+</div>
+<!-- main_container ends here -->
+{% endblock %}
+{% block js_block %}
+<script type="text/javascript">
+ 
+
+</script>
+{% endblock js_block %}

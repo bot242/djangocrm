@@ -1,0 +1,223 @@
+{% extends 'management/base.html' %}
+{% load staticfiles %}
+{% load common_tags %}
+{% load paginate %}
+{% block extralinks %} 
+<style>
+  .modebar {
+    display: none
+  }
+
+  .text_ellipsis {
+    width: 22em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .text_ellipsis_1 {
+
+    width: 20em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+{% endblock %}
+{% block content %}
+{{ block.super }}
+<div class="" style="">
+  <div class="row marl">
+    <div class="col-md-12">
+      <!-- Dashboard page will come soon -->
+
+
+      <div class="row marl justify-content-center">
+        <div class="col-md-9">
+          <!-- count_blocks_row starts here -->
+          <div class="row count_blocks_row">
+            <div class="col-md-3">
+              <div class="item sky_blue">
+                <a href="{% url 'management:visitor' %}">
+                  
+                  <div class="title">visitor</div>
+                  <div class="count"></div>
+
+                </a>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <!-- <div class="item green">
+                <a href="{% url 'marketing:contact_lists' %}">
+                  <div class="title">Contacts List</div>
+                  <div class="count">{{contacts_list|length}}</div>
+                </a>
+                <div class="more"><a href="#">Go Live</a></div>
+              </div> -->
+            </div>
+            <div class="col-md-3">
+              <!-- <div class="item red">
+                <a href="{% url 'management:visitor' %}">
+                  
+                  <div class="title">visitor</div>
+                  <div class="count"></div>
+
+                </a>
+              </div> -->
+            </div>
+            <div class="col-md-3">
+              <div class="item yellow">
+                <!-- <a href="{% url 'marketing:campaign_list' %}">
+                  <div class="title">Campaigns</div>
+                  <div class="count">{{campaigns|length}}</div>
+                </a> -->
+              </div>
+            </div>
+          </div>
+          <!-- count_blocks_row ends here -->
+          <div class="open_sections row">
+
+            <div class="col-md-12">
+              <div class="" id="graph">
+                <!-- <a href="{% url 'marketing:contacts_list' %}">
+                  <div class="title">Contacts</div>
+                  <div class="count">{{contacts|length}}</div>
+                </a> -->
+              </div>
+            </div>
+
+
+            
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block js_block %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+
+<script type="text/javascript">
+
+  $(document).ready(function () {
+    $(".tag_class_cl").click(function () {
+      // $(".tag_class_opp").css('cursor', 'pointer')
+    //   url = "{% url 'marketing:contact_lists' %}"
+      url = url + "?tag=" + $(this).attr('data-link')
+      window.location.href = url;
+    });
+
+    $(".tag_class_camp").click(function (e) {
+      e.preventDefault()
+      // $(".tag_class_opp").css('cursor', 'pointer')
+    //   url = "{% url 'marketing:campaign_list' %}"
+      url = url + "?tag=" + $(this).attr('data-link')
+      window.location.href = url;
+    });
+
+    {% if campaigns|length %}
+
+    var trace1 = {
+      // x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      // y: [20, 14, 25, 16, 18, 22, 19, 15, 12, 16, 14, 17],
+      x:{{x_axis_titles|safe}},
+      y:{{y_axis_unsubscribed}},
+      type: 'bar',
+      name: 'Unsubscribed',
+      marker: {
+        color: 'rgb(49,130,189)',
+        opacity: 0.7
+      }
+    };
+
+    var trace2 = {
+      // x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      // y: [19, 14, 22, 14, 16, 19, 15, 14, 10, 12, 12, 16],
+      x:{{x_axis_titles|safe}},
+      y:{{y_axis_bounces}},
+      type: 'bar',
+      name: 'Bounces',
+      marker: {
+        color: '#e65c00',
+        opacity: 0.5
+      }
+    };
+
+    var trace3 = {
+      // x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      // y: [19, 14, 22, 14, 16, 19, 15, 14, 10, 12, 12, 16],
+      x:{{x_axis_titles|safe}},
+      y:{{y_axis_subscribed}},
+      type: 'bar',
+      name: 'Subscribed',
+      marker: {
+        color: '#00cc00',
+        opacity: 0.5
+      }
+    };
+
+    var trace4 = {
+      // x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      // y: [19, 14, 22, 14, 16, 19, 15, 14, 10, 12, 12, 16],
+      x:{{x_axis_titles|safe}},
+      y:{{y_axis_opened}},
+      type: 'bar',
+      name: 'Opened',
+      marker: {
+        color: '#00ffff',
+        opacity: 0.5
+      }
+    };
+
+    var data = [trace1, trace2, trace3, trace4];
+
+    var layout = {
+      title: 'Campaigns',
+      margin: {
+        b: 160,
+        l: 120,
+      },
+      xaxis: {
+        type: 'category',
+        tickangle: -45,
+      },
+      barmode: 'group'
+    };
+
+    Plotly.newPlot('graph', data, layout);
+
+    {% endif %}
+
+  });
+
+  // $('.modebar').css('display','none');
+
+</script>
+<script>
+  Highcharts.chart('container', {
+      chart: {
+          type: 'column'
+      },
+      title: {
+          text: 'Case'
+      },
+      
+      xAxis: {
+          categories: [
+           'Case'
+          ]
+      },
+      series: [{
+          name: 'Case',
+          data: [
+            {{case_count }}],
+          color: 'green'
+      }]
+  });
+</script>
+
+{% endblock js_block %}

@@ -1,0 +1,396 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<style>
+/* table {
+  border: 1px solid black !important;
+} */
+.color {
+  background-color: rgb(228, 161, 38);
+}
+.line{
+    margin: 0 0 12px 0 !important;
+  }
+  .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+{% endblock %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'cases:slalist' %}">SLA</a></li>
+    <li class="breadcrumb-item active">{% if case_obj %}Edit{% else %}Create{% endif %}</li>
+  </ol>
+</nav>
+{% endblock %}
+{% block content %}
+<!-- <form id="submitForm2" method="POST" action="{% url 'cases:allsla' %}" novalidate enctype="multipart/form-data">
+  <div class="overview_form_block row marl justify-content-center">
+    <div class="col-md-12">
+      <div class="mt-3 mb-2">
+        <span>SLA POLICIES - VOICE</span>
+      </div>
+      <div class="row marl no-gutters">
+        <table class="table table-border">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">CASE STAGES</th>
+                <th scope="col">RESPOND WITHIN</th>
+                <th scope="col">ESCALATE TO</th>
+                <th scope="col">ESCALATION EMAIL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td scope="row"><b>open</b></td>
+                <td>
+                    <input type="time" id="appt1" name="voiceopentime"  required> Hours
+                </td>
+                <td>
+                    <select name ="vuser" class="form-control">
+                      {% for u in user_list %}
+                        <option  value={{u.id}}>{{u.username}}</option>
+                      {% endfor %}
+                        
+                    </select>
+                </td>
+                <td>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+                
+              </tr>
+              <tr>
+                <td scope="row"><label name="progress_voice"><b>In Progress</b></label></td>
+                <td><input type="time" style="width:81px" id="appt3" name="voiceprogresstime"  required>Hours</td>
+                <td>
+                    <select name="puser" class="form-control">
+                      {% for u in user_list %}
+                      <option value={{u.id}}>{{u.username}}</option>
+                      {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+
+    </div>
+  </div>
+
+
+    <div class="overview_form_block row marl justify-content-center mt-3">
+      <div class="col-md-12">
+        <div class=" mb-3">
+          <span>SLA POLICIES - EMAIL</span>
+        </div>
+        <div class="row marl no-gutter">
+          <table class="table">
+              <thead  class="thead-light">
+                <tr>
+                  <th scope="col">CASE STAGES</th>
+                  <th scope="col">RESPOND WITHIN</th>
+                  <th scope="col">ESCALATE TO</th>
+                  <th scope="col">ESCALATION EMAIL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row"><label><b>Open</b></label></td>
+                  <td>
+                      <input type="time" id="appt" name="emailopentime"  required> Hours
+                  </td>
+                  <td>
+                      <select name="euser" class="form-control">
+                        {% for u in user_list %}
+                        <option value="{{u.id}}">{{u.username}}</option>
+                      {% endfor %}
+                      </select>
+                  </td>
+                  <td>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                  </td>
+
+                </tr>
+                <tr>
+                  <td scope="row"><label><b>In Progress</b></label></td>
+                  <td><input type="number" style="width:81px" id="appt1" name="emailprogressday"  required> Days</td>
+                  <td>
+                    <select name="p_user" class="form-control">
+                      {% for u in user_list %}
+                      <option value="{{u.id}}">{{u.username}}</option>
+                    {% endfor %}
+                    </select>
+                  </td>
+                  <td>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <div class="col-md-12 marl buttons_row form_btn_row  mt-5">
+            <button class="btn btn-success" type="submit" style="font-size:16px;" id="submit">Submit</button>
+            <button class="btn btn-warning" type="reset" style="color:#fff;font-size:16px;" id="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+  </form> -->
+  <form id="submitForm2" method="POST" action="{% url 'cases:allsla' %}" >
+  <div class="overview_form_block row marl justify-content-center">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mt-3 mb-3">
+            <span><b>SLA POLICIES - VOICE</b></span>
+          </div>
+          <div class="row marl no-gutters">
+            <table class="table  table-bordered">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">CASE STAGES</th>
+                    <th scope="col">RESPOND WITHIN</th>
+                    <th scope="col">ESCALATE TO</th>
+                    <th scope="col">ESCALATION EMAIL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td scope="row"><b>open</b></td>
+                    <td>
+                        <input type="time" required id="appt1" name="voiceopentime"> Hours
+                    </td>
+                    <td>
+                        <select name ="vuser" class="form-control">
+                          {% for u in user_list %}
+                            <option  value={{u.id}}>{{u.username}}</option>
+                          {% endfor %}
+                            
+                        </select>
+                    </td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    
+                  </tr>
+                  <tr>
+                    <td scope="row"><label name="progress_voice"><b>In Progress</b></label></td>
+                    <td><input type="time" required style="width:81px" id="appt3" name="voiceprogresstime"> Hours</td>
+                    <td>
+                        <select name="puser" class="form-control">
+                          {% for u in user_list %}
+                          <option value={{u.id}}>{{u.username}}</option>
+                          {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                      <label class="switch">
+                          <input type="checkbox" checked>
+                          <span class="slider round"></span>
+                      </label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class=" mb-3 mt-3">
+            <span><b>SLA POLICIES - EMAIL</b></span>
+          </div>
+          <div class="row marl no-gutter">
+            <table class="table table-bordered">
+                <thead  class="thead-light">
+                  <tr>
+                    <th scope="col">CASE STAGES</th>
+                    <th scope="col">RESPOND WITHIN</th>
+                    <th scope="col">ESCALATE TO</th>
+                    <th scope="col">ESCALATION EMAIL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td scope="row"><label><b>Open</b></label></td>
+                    <td>
+                        <input type="time" id="appt" name="emailopentime"  required> Hours
+                    </td>
+                    <td>
+                        <select name="euser" class="form-control">
+                          {% for u in user_list %}
+                          <option value="{{u.id}}">{{u.username}}</option>
+                        {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                      <label class="switch">
+                          <input type="checkbox" checked>
+                          <span class="slider round"></span>
+                      </label>
+                    </td>
+  
+                  </tr>
+                  <tr>
+                    <td scope="row"><label><b>In Progress</b></label></td>
+                    <td><input type="number" style="width:81px" id="appt1" name="emailprogressday"  required> Days</td>
+                    <td>
+                      <select name="p_user" class="form-control">
+                        {% for u in user_list %}
+                        <option value="{{u.id}}">{{u.username}}</option>
+                      {% endfor %}
+                      </select>
+                    </td>
+                    <td>
+                      <label class="switch">
+                          <input type="checkbox" checked>
+                          <span class="slider round"></span>
+                      </label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 marl buttons_row form_btn_row  mt-5">
+        <button class="btn btn-success" type="submit" style="font-size:16px;" id="submit">Submit</button>
+        <button class="btn color" type="reset" style="color:#fff;font-size:16px;" id="reset">Reset</button>
+        <a href="{% url 'cases:allslalist' %}"><buton class="btn btn-danger">Cancel</buton></a>
+    </div>
+
+    </div>
+  </div>
+</form>
+
+   
+
+
+{% endblock %}
+{% block js_block %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://malsup.github.io/jquery.form.js"></script>
+<style>
+  .pannel {
+    background: #f1eff1 !important;
+    color: #2a2a2b !important;
+    padding: 0 !important;
+    height: 32px !important;
+    border-color: #ebe9ec !important;
+  }
+  .te{
+    margin: 0 0 12px 0 !important;
+  }
+  .vj{
+    background: url(/static/images/select.ico) no-repeat right #fff !important;
+    /* background-color: #fff; */
+    background-size: 31px 52px !important;
+    color: #65697a !important;
+    padding: 0 52px 0 5px !important;
+    border-color: #a5e8d6 !important;
+    border-style: solid !important;
+    /* border-radius: 4px !important; */
+    line-height: 28px !important;
+    outline: 0 !important;
+    /* height: 28px !important; */
+    
+
+  }
+  .save{
+    background-color: #00235a !important;
+
+  }
+  .save:hover{
+    background-color: #0d8fc7 !important;
+
+  }
+  .savenew{
+    border: none !important; 
+
+  }
+  .clear{
+    background-color: #00235a !important;
+    border: none !important; 
+    border-radius: 0 !important;
+    color: white !important;
+  }
+  .form-control{
+    /* height: calc(1em + .75rem + 2px) !important; */
+  }
+</style>
+{% endblock js_block %}

@@ -1,0 +1,716 @@
+{% load staticfiles %}
+{% load compress %}
+{% load thumbnail %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuarcpro IMS</title>
+  <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="icon" 
+  type="image/png" 
+  href="/static/images/a.ico" />
+  <link rel="stylesheet" href="/static/css/menu.css">
+  {% block date_picker %}
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+  {% endblock date_picker %}
+
+  {% block quill_editor_links %}
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet">
+  {% endblock quill_editor_links %}
+
+
+  <link href="http://zoogletech.com/crmscss/main.css" rel="stylesheet">
+  <link href="http://zoogletech.com/crmscss/mention.css" rel="stylesheet">
+ 
+  <script src="{% static 'channels/js/websocketbridge.js' %}" type="text/javascript"></script>
+
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>  
+  
+
+  <style>
+.card-body {
+  padding:0;
+  margin:0
+}
+.select2-container--default .select2-results__option[aria-disabled=true] {
+  display: none;
+}
+.closeform {
+  float:right;
+  cursor: default;
+  color: black;
+  font-size:25px;
+  border: none;
+  background-color: transparent;
+}
+.megamenu-li {
+	position: static;
+}
+/* header .navbar .navbar-nav li .dropdown-menu {
+    padding: 0;
+    background-color: rgb(192, 177, 177);
+} */
+header .navbar .navbar-brand {
+  color: #FFF;
+  font-weight: 600;
+  margin-right: 50px;
+}
+
+.megamenu {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  
+}
+
+header .navbar .navbar-nav li .dropdown-menu a {
+  color: black !important;
+}
+header .navbar .navbar-nav li .dropdown-menu h4 {
+  color: rgba(49, 48, 48, 0.788) !important;
+}
+.item {
+  background: #fff;
+  border-radius: 0;
+  padding: 10px;
+  border: none;
+  min-height: 100px;
+  background-color:#53c583;  
+}
+
+.title1 {
+  line-height: 5.00rem;
+  font-weight: 600;
+  font-size: 1.00rem;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+}
+.title2 {
+  line-height: 5.00rem;
+  font-weight: 600;
+  font-size: 0.90rem;
+  color: #fff;
+  /* text-align: center; */
+  text-transform: uppercase;
+}
+
+
+.icons {
+  font-size: 30px;
+  color: #FFF;
+  /* margin-left: 30px; */
+  line-height: 52px;
+  min-height: 90px;
+  float: left;
+  width: 2.25em;
+}
+.item1 {
+  background: #fff;
+  border-radius: 0;
+  padding: 10px;
+  border: none;
+  min-height: 100px;
+  background-color:#e9635a;    
+}
+.item2 {
+  background: #fff;
+  border-radius: 0;
+  padding: 10px;
+  border: none;
+  min-height: 100px;
+  background-color:#aa44be;
+}
+.item3 {
+  background: #fff;
+  border-radius: 0;
+  padding: 10px;
+  border: none;
+  min-height: 100px;
+  
+  background-color:#c5c223;
+}
+.item4 {
+  background: #fff;
+  border-radius: 0;
+  padding: 10px;
+  border: none;
+  min-height: 100px;
+  background-color:#ec3ac6;
+}
+.item5 {
+  background: #fff;
+  border-radius: 0;
+  padding: 10px;
+  border: none;
+  min-height: 100px;
+  
+  background-color:#4b27cf;
+}
+.icon1 {
+  font-size: 30px;
+  color: #FFF;
+  margin-right: 12px;
+  line-height: 52px;
+  min-height: 90px;
+  float: left;
+  width: 2.25em;
+}
+header .navbar .navbar-nav li .dropdown-menu a svg {
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 1.00rem;
+}
+header .navbar .navbar-nav li .dropdown-menu a { 
+  font-size: 1.00rem;
+}
+.navbar .dropdown:hover .dropdown-menu, .navbar .dropdown .dropdown-menu:hover {
+  display:block!important;
+}
+.navbar-nav>li>.dropdown-menu {
+    /* margin-top: 20px; */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.zoom:hover {
+  -ms-transform: scale(1.0); /* IE 9 */
+  -webkit-transform: scale(1.0); /* Safari 3-8 */
+  transform: scale(1.1); 
+}
+  </style>
+  {% block extralinks %} {% endblock %}
+</head>
+
+<body class="main_body_bg_color">
+  <div class="wrapper">
+    {% block header %}
+    <header>
+      <nav class="navbar navbar-default navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="#">Nuarcpro IMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown megamenu-li">
+              <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+              <div class="dropdown-menu megamenu" aria-labelledby="dropdown01">
+                <div class="row ml-1 mt-3 pb-3 mr-1">                 
+                  <div class="col-sm-2 zoom">
+                    <div class="row ">        
+                      <div class="col-md-12">
+                        <div class="item">                          
+                          <i class="fa fa-users icons " aria-hidden="true"></i>
+                          <div class="title1">sales</div>                  
+                        </div>
+                      </div>
+                  </div> 
+                  <div class="row mt-2"> 
+                    <a class="dropdown-item" href="/">                  
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Dashboard
+                    </a>                  
+                    <a class="dropdown-item" href="{% url 'accounts:list' %}">                  
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Accounts
+                    </a>
+                    <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>               
+                      Contacts
+                    </a>
+                    <a class="dropdown-item" href="{% url 'leads:list' %}">                  
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Leads
+                    </a>
+                    <a class="dropdown-item" href="{% url 'opportunities:list' %}">                  
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Opportunities
+                    </a>                  
+                  </div>
+                </div>
+                <div class="col-md-2 zoom">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="item1">                              
+                        <i class="fas fa-dollar-sign icons"></i>
+                        <div class="title1">Marketing</div>                  
+                      </div>
+                    </div>
+                  </div>   
+
+                  <div class="row mt-2">        
+                    <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Dashboard
+                    </a>                                 
+                    <a class="dropdown-item" href="{% url 'contacts:list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>                
+                      Contacts
+                    </a>                
+                    <a class="dropdown-item" href="{% url 'marketing:campaign_list' %}">                
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Email templates
+                    </a>
+                    <a class="dropdown-item" href="{% url 'marketing:email_template_list' %}">                
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Campaigns
+                    </a>                
+                  </div>
+                </div>
+
+                <div class="col-md-2 zoom">
+                  <div class="row ">
+                    <div class="col-md-12">
+                      <div class="item2">                              
+                        <i class="fas fa-chalkboard-teacher icon1"></i> 
+                        <div class="title2">Case management</div>                  
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <a class="dropdown-item" href="{% url 'accounts:list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Accounts
+                    </a>   
+                    <a class="dropdown-item" href="{% url 'contacts:list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Contacts
+                    </a>   
+                    <a class="dropdown-item" href="{% url 'cases:list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Cases
+                    </a>                     
+                  </div>
+                </div>
+
+                <div class="col-md-2 zoom">
+                  <div class="row ">
+                    <div class="col-md-12">
+                      <div class="item3">                              
+                        <i class="fa fa-user-plus icons" aria-hidden="true"></i>
+                        <div class="title1">Activities</div>                  
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <a class="dropdown-item" href="{% url 'events:events_list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Events
+                    </a>                                       
+                    <a class="dropdown-item" href="{% url 'tasks:tasks_list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Tasks
+                    </a>
+                    <a class="dropdown-item" href="{% url 'invoices:invoices_list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Invoices
+                    </a>                     
+                    <a class="dropdown-item" href="#">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Notes
+                    </a>                     
+                  </div>
+                </div>              
+           
+                <div class="col-md-2 zoom">
+                  <div class="row ">
+                    <div class="col-md-12">
+                      <div class="item4">                              
+                        <i class="fa fa-retweet icons" aria-hidden="true"></i>
+                        <div class="title1">Collaboration</div>                  
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <a class="dropdown-item" href="{% url 'teams:teams_list' %}">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Teams
+                    </a>   
+                    <a class="dropdown-item" href="#">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Documents
+                    </a>   
+                    <!-- <a class="dropdown-item" href="#">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      Projects
+                    </a>                                   -->
+                  </div>
+                  </div>   
+                </div>
+              </div>
+            </li>                   
+          </ul>
+        <ul class="navbar-nav navbar-right my-2 my-lg-0">
+          <li class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle abcd nav-link" data-toggle="dropdown" role="button"
+              aria-haspopup="true" aria-expanded="false">
+              {% if not request.user.profile_pic %}
+              <img src="{% static 'images/user.png' %}" alt="Micro profile pic">
+              {% else %}
+              {% thumbnail request.user.profile_pic "25x25" as im %}
+              <img src="{{ im.url }}">
+              {% endthumbnail %}
+              {% endif %}
+              <b class="caret"></b>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              {% if request.user.role == "ADMIN"  or request.user.is_superuser %}
+              <a class="dropdown-item" href="{% url 'common:users_list' %}">Users</a>
+              <a class="dropdown-item" href="{% url 'common:api_settings' %}">Settings</a>
+              {% endif %}
+              {% if request.user.email != "admin@micropyramid.com" %}
+              <a class="dropdown-item" href="/change-password/">Change Password</a>
+              {% endif %}
+              <a class="dropdown-item" href="{% url 'common:profile' %}">Profile</a>
+              <a class="dropdown-item" href="{% url 'common:logout' %}">Logout</a>
+            </div>
+          </li>
+        </ul>
+        </div>
+      </nav>      
+     
+    </header>
+    {% endblock %}
+
+    <div id="mainbody" class="main_container" style="margin-top:65px;">
+      <audio id="audio" src="/static/audio/office_phone_ringigng.mp3" autostart="false" ></audio>
+
+
+      <div onclick="openForm()"></div>
+      
+      <div class="s"  id="myForm">
+        <form action="/action_page.php" class="form-container">        
+          <div class="modal-header" style="padding: 0px; border: 0px;">
+            <!-- <h5 class="modal-title" id="exampleModalLabel">User</h5> -->
+            <button type="button" class="closeform" onclick="closeForm()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        
+        <div class="w3-container w3-center">       
+          <img class="rounded-circle" src="/static/images/iocn/help-desk-icon.png" alt="Avatar" style="width:80%">
+          <h5 id="po"></h5>
+          <!-- <h4>Phone</h4> -->
+          <h6 id="io"> </h6>
+  
+          <div class="row">
+            <a type="button" class="primary_btn btn-block btn-sm" onclick="sound()" id="contact" href="{% url 'contacts:add_contact' %}">Add Contact</a>
+            <a type="button" class="primary_btn btn-block btn-sm" onclick="sound()" id="case" href="{% url 'cases:add_case' %}">Create Case</a>
+          </div>
+        </div>
+        <!-- <button type="button" class="btn cancel" onclick="closeForm()">Close</button> --> 
+        </form>
+      </div>
+      </form>
+    </div>
+      {% block breadcrumb %}
+      {% endblock %}
+
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  {% block moment_js_block %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+  <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+  {% endblock moment_js_block %}
+
+  <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+  {% block extra_js_block %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+  {% endblock extra_js_block %}
+
+
+  {% block js_block %}{% endblock js_block %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".megamenu").on("click", function(e) {
+          e.stopPropagation();
+      });
+    });
+    $(document).ready(function () {
+      word = window.location.pathname.split('/')[1];
+      if (word == "") {
+        $("#dashboard").addClass('active');
+      }
+      else {
+        $('#' + word).addClass('active');
+      }
+      marketing_word = window.location.pathname.split('/')[2];
+      if (marketing_word == "") {
+        $("#marketing-dashboard").addClass('active');
+      }
+      // console.log(marketing_word.substring(0,7) === 'contact');
+      else if (marketing_word.substring(0, 7) === "contact") {
+        $("#contact").css({ 'border-bottom': '3px solid #099CBE,' });
+        $(".contact_class").css('border-bottom', '3px solid #099CBE');
+        marketing_word = window.location.pathname.split('/')[2]
+        // console.log(marketing_word)
+        // console.log(marketing_word == 'contact-list')
+        // console.log(marketing_word == 'contacts')
+        if (marketing_word == 'contact-list') {
+          $(".contact-list").css('background', '#e5e5e5');
+        }
+        if (marketing_word == 'contacts') {
+          $(".contacts").css('background', '#e5e5e5');
+        }
+        // $("#contacts").css('background','#e5e5e5');
+      }
+      else {
+        $('#' + marketing_word).addClass('active')
+      }
+    });
+  /*
+      Usage is very simple; to block user activity for the page:
+        $.blockUI();
+  
+      Blocking with a custom message:
+        $.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' });
+  
+      Blocking with custom style:
+        $.blockUI({ css: { backgroundColor: '#f00', color: '#fff'} });
+  
+      To unblock the page:
+        $.unblockUI();
+  
+      If you want to use the default settings and have the UI blocked for all ajax requests, it's as easy as this:
+        $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+    */
+  </script>
+
+
+<script>
+  var sound = document.getElementById("audio");
+  document.addEventListener('DOMContentLoaded', function () {
+      const webSocketBridge = new channels.WebSocketBridge();
+      const nl = document.querySelector("#notifylist");
+
+      webSocketBridge.connect('/contatcts/');
+      webSocketBridge.listen(function (action, stream) {
+          console.log("RESPONSE:", action);
+          if (action.event == "New User") {
+              var el = document.createElement("li");
+              // el.innerHTML = `A user <b>${action.user}</b> `;
+              var fl1 = "Unknown Number"
+              var fl2 = action.phone
+              var fl3 = action.user
+              openForm(action.phone, fl1, action.user)
+              // console.log('iiuiyiyiyuui')
+              // document.getElementById('id1').value = fl1
+              // document.getElementById('id2').value = fl2
+              // document.getElementById('id3').value = fl3
+              document.getElementById("case").style.display = "none";
+              document.getElementById("contact").style.display = "block";
+
+              localStorage.setItem("phone",fl2);
+              localStorage.setItem("name",fl1);
+
+              // nl.appendChild(el);
+              console.log('new')
+              // addcon(action.phone)
+          }
+          else {
+            var fl1 = action.username
+              var fl2 = action.phone
+              var fl3 = action.user
+              console.log("old user")
+              openForm(action.phone, action.username, action.user)
+              localStorage.setItem("phone",fl2);
+              localStorage.setItem("name",fl1);
+              document.getElementById("case").style.display = "block";
+              document.getElementById("contact").style.display = "none";
+
+
+          }
+      })
+      document.ws = webSocketBridge; /* for debugging */
+  })
+  function sound(){
+    sound.pause()
+  }
+  function openForm(av, vc) {
+    
+          sound.play()
+      console.log('dddddd', vc)
+      document.getElementById('po').innerHTML = vc
+      document.getElementById('io').innerHTML = av
+      document.getElementById("myForm").style.display = "block";
+      // document.getElementById("case").style.display = "block";
+      // document.getElementById("contact").style.display = "none";
+
+  }
+
+  function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+      // document.getElementById("case").style.display = "none";
+      // document.getElementById("contact").style.display = "block";
+
+
+  }
+
+</script>
+
+
+ <style>
+
+
+.s{
+
+color: #fff!important;
+  background-color: #616161!important;
+  display: none;
+      position: fixed;
+      bottom: 6px;
+      right: 10px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+      width: 18%;
+
+}
+.w3-center {
+  text-align: center!important;
+}
+.w3-container, .w3-panel {
+  padding: 0.01em 16px;
+}
+.w3-section, .w3-code {
+  margin-top: 16px!important;
+  margin-bottom: 16px!important;
+}
+.w3-green, .w3-hover-green:hover {
+  color: #fff!important;
+  background-color: #4CAF50!important;
+}
+.w3-red, .w3-hover-red:hover {
+  color: #fff!important;
+  background-color: #f44336!important;
+}
+
+
+
+  body {
+      font-family: Arial, Helvetica, sans-serif;
+  }
+
+  * {
+      box-sizing: border-box;
+  }
+  header .navbar .navbar-nav .nav-item a.active {
+  color:#099CBE!important;
+  border-bottom: 3px solid #099CBE;
+}
+header .navbar .navbar-nav .nav-item a{
+  color:white!important;
+  border-bottom: 3px solid #099CBE;
+}
+header .navbar .navbar-nav.navbar-right .dropdown a{
+  color: black !important;
+}
+.form-container{
+  background: #5193f7 !important;
+}
+  /* Button used to open the chat form - fixed at the bottom of the page */
+  .open-button {
+      /* background-color: #555; */
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      opacity: 0.8;
+      position: fixed;
+      bottom: 23px;
+      right: 28px;
+      width: 200px;
+    /* border-radius: 50%; */
+  }
+#msg{
+  font-size: large;
+}
+  /* The popup chat - hidden by default */
+  .chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      right: 10px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+      width: 25%;
+  }
+
+  /* Add styles to the form container */
+  .form-container {
+      max-width: 300px;
+      padding: 10px;
+      background-color: white;
+  }
+
+  /* Full-width textarea */
+  .form-container textarea {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      border: none;
+      background: #f1f1f1;
+      resize: none;
+      min-height: 200px;
+  }
+
+  /* When the textarea gets focus, do something */
+  .form-container textarea:focus {
+      background-color: #ddd;
+      outline: none;
+  }
+
+  /* Set a style for the submit/send button */
+  .form-container .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+      opacity: 0.8;
+  }
+
+  /* Add a red background color to the cancel button */
+  .form-container .cancel {
+      background-color: red;
+  }
+
+  /* Add some hover effects to buttons */
+  .form-container .btn:hover,
+  .open-button:hover {
+      opacity: 1;
+  }</style>
+</body>
+
+{% load staticfiles %}
+{% load compress %}
+{% load thumbnail %}
+
+ 

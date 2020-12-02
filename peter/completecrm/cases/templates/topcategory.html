@@ -1,0 +1,760 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load paginate %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+
+<style>
+  .form-group label {
+    font-weight: 550;
+    color: #6c757d;
+  }
+  .green {
+    border: 1px solid rgb(201, 197, 197);
+    padding:5px;
+    color: rgb(34, 148, 34);
+  }
+  .red {
+    border: 1px solid rgb(201, 197, 197);
+    padding:5px;
+    color: rgb(201, 48, 48);
+  }
+  .tab12, .tab12:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  </style>
+{% endblock %}
+{% block content %}
+<!-- main_container starts here -->
+<div class="main_container">
+  <!-- heading_create starts here -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'common:casedashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active">{% if case_obj %}Edit{% else %}Cases{% endif %}</li>
+    </ol>
+  </nav>
+
+  <div class="col-md-12 mt-3" id="myDIV">
+    {% if request.user.is_superuser %}
+    <a href="{% url 'cases:list' %}">
+      <button type="button" class="btn btn-outline-primary mr-3 buto  tab12" id="tab1">
+        All
+      </button>
+    </a>
+    
+    <a href="{% url 'cases:individual' %}">
+      <button type="button" class="btn btn-outline-primary buto" id="tab2">
+      Individual
+      </button>
+    </a>
+    {% endif %}
+  </div>
+
+  <div id="all">
+    <div class="row marl">
+      <div class="col-lg-12 text-right">
+        <span class="d-inline"><a class="primary_btn" href="{% url 'cases:add_case' %}"><i class="fa fa-plus"></i> Add New
+            Case</a></span>
+      </div>
+    </div>
+    <div class="filter_row list_filter_row row marl">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <form id="cases_filter" method="POST" action="">
+              <div class="card-body">
+                <div class="card-title">Filters</div>
+                <div class="row marl">
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Name</label>
+                      <input type="text" class="form-control" placeholder="Name" name="name"
+                        value="{{request.POST.name}}">
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Status</label>
+                      <select class="form-control" id="id_status" name="status">
+                        <option value="">--Status--</option>
+                        {% for each_status in case_status %}
+                        <option value="{{each_status.0}}" {% if request.POST.status %}
+                          {% ifequal each_status.0 request.POST.status %}selected{% endifequal %}{% endif %}>
+                          {{each_status.1}} </option>
+                        {% endfor%}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Priority</label>
+                      <select class="form-control" id="id_priority" name="priority">
+                        <option value="">--Priority--</option>
+                        {% for each_priority in case_priority %}
+                        <option value="{{each_priority.0}}" {% if request.POST.priority %}
+                          {% ifequal each_priority.0 request.POST.priority %}selected{% endifequal %}{% endif %}>
+                          {{each_priority.1}} </option>
+                        {% endfor%}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Category</label>
+                      <select class="form-control" id="id_case_type" name="case_type">
+                        <option value="">--Select Category--</option>
+                        {% for ct in case_case_type %}
+                        <option value="{{ct.0}}" {% if request.POST.case_type %}
+                          {% ifequal ct.0 request.POST.case_type %}selected{% endifequal %}{% endif %}>{{ct.1}}</option>
+                        {% endfor %}
+                      </select>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Account</label>
+                      <select class="form-control" id="id_account" name="account">
+                        <option value="">--Select Account--</option>
+                        {% for ac in accounts %}
+                        <option value="{{ac.id}}" {% ifequal acc ac.id %} selected {% endifequal %}>{{ac.name}}</option>
+                        {% endfor %}
+                      </select>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Date</label>
+                      <input id="datepicker" class="form-control" type="datepicker" name="date" value="{{date}}"
+                        placeholder="Select Date" />
+  
+                    </div>
+                  </div>
+                  <input type="hidden" id="per_page_per_page_fieldfield" name="per_page">
+                  <div class="filter_col text-left col-2">
+                    <div class="form-group buttons_row text-center">
+                      <button class="btn btn-success" style="font-size: 16px;" id="filter_click" type="submit">Search</button>
+                      <a href="{% url 'cases:list' %}" id="filter_clear" class="btn btn-danger">Clear</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- heading_create ends here -->
+    <!-- filter_row starts here -->
+    <div class="table_container_row row marl ">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="panel-heading-list card-title text-right">
+              <span class="total_count float-left">Cases List</span>
+              <span class="filter_toggle ">
+                <a href="#" class="primary_btn"><i class="fas fa-filter"></i> Filter</a>
+              </span>
+            </div>
+            <div class="table-responsive">
+              <table class="table " id="multiselect">
+                <thead>
+                  {% if cases|length > 0 %}
+                  <tr>
+                    <th width="5%">Case Number</th>
+                    <th width="10%">Name</th>
+                    <th width="10%">Account</th>
+                    <th width="10%">Status</th>
+                    <th width="10%">Priority</th>
+                    <th width="12%">Category</th>
+                    <th width="15%">Created On</th>
+                    <th width="15%">Actions</th>
+                    <th width="30%">SLA</th>
+                  </tr>
+                  {% endif %}
+                </thead>
+                <tbody>
+                  {% if per_page %}
+                  {% paginate per_page cases %}
+                  {% else%}
+                  {% paginate 10 cases%}
+                  {% endif %}
+                  {{top}}
+                  {% for c in top %}
+                  {% for case in c %}
+                  <tr class="case_row{{case.id}}" style="text-align:center;">
+                    <td scope="row">{{case.case_number}}</td>
+                    <td><a href="#" data-toggle="modal" style="color:#454545;font-size:1rem;"
+                        data-target="#exampleModalView_case{{case.id}}">{{ case.name }}</a></td>
+                    <td>
+                      {% if case.account %}
+                      <a href="{% url  'accounts:view_account' case.account.id %}">{{ case.account }}</a>
+                      {% else %}
+                      No Related Account
+                      {% endif %}
+                    </td>
+                    <td id="status_id{{forloop.counter0}}" class="status" status="{{case.status}}">{{ case.status }}</td>
+                    {% if case.priority == 'Critical' %}
+                    <td> <span class="red" id="prity1">{{ case.priority }}</span></td>
+                    {% else %}
+                    <td> <span class="green" id="prity2">{{ case.priority }}</span></td>
+                    {% endif %}
+                    
+                    <td>{{case.case_type}}</td>
+                    <td id="time{{forloop.counter0}}" title="{{ case.created_on }}">
+                      {{ case.created_on|date:"M d,Y H:i:s"}}</td>
+                    <td class="actions">
+                      <!-- <a href="{% url 'cases:view_case' case.id %}" class="btn btn-info view" title="View"><i
+                          class="fas fa-eye"></i></a> -->
+                      <a href="#" data-toggle="modal" class="btn btn-info view" data-target="#exampleModalView_case{{case.id}}" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="{% url 'cases:edit_case' case.id %}" class="btn btn-success edit" title="Edit"><i
+                          class="fas fa-pencil-alt"></i></a>
+                      {% if request.user == case.created_by or request.user.role == "ADMIN" or request.user.is_superuser %}
+                      <a href="{% url 'cases:remove_case' case.id %}" class="btn btn-danger delete remove_case"
+                        title="Delete"><i class="fas fa-trash-alt"></i></a>
+                      {% if case.status != 'Closed' %}
+                      <a onclick="close_case({{case.id}}, '{% url 'cases:close_case' %}')" class="btn btn-secondary"
+                        title="Close"><i class="fas fa-times"></i> </a>
+                      {% endif %}
+                      {% endif %}
+                    </td>
+                    <td>
+                      <div id="reds{{forloop.counter0}}">
+                        <h5>
+                          <span id="hh{{forloop.counter0}}"></span>:
+                          <span id="mm{{forloop.counter0}}"></span>:
+                          <span id="ss{{forloop.counter0}}"></span>
+                        </h5>
+  
+                        <p id="timer{{forloop.counter0}}"></p>
+                      </div>
+                      <p id="cass{{forloop.counter0}}" style="display: none;"></p>
+  
+                    </td>
+                    
+                  </tr>
+                  <div id='sla{{forloop.counter0}}' style="display: none;">{{case.sla|date:"M d,Y H:i:s"}}</div>
+                  {% endfor %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% ifequal cases|length 0 %}
+            <h6 class="text-center">No Cases Records Found</h6>
+            {% endifequal %}
+            <div class="marl row text-center">
+              {% show_pages %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div id="ind" style="display: none;">
+    <div class="row marl">
+      <div class="col-lg-12 text-right">
+        <span class="d-inline"><a class="primary_btn" href="{% url 'cases:add_case' %}"><i class="fa fa-plus"></i> Add New
+            Case</a></span>
+      </div>
+    </div>
+    <div class="filter_row list_filter_row row marl">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <form id="cases_filter" method="POST" action="">
+              <div class="card-body">
+                <div class="card-title">Filters</div>
+                <div class="row marl">
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Name</label>
+                      <input type="text" class="form-control" placeholder="Name" name="name"
+                        value="{{request.POST.name}}">
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Status</label>
+                      <select class="form-control" id="id_status" name="status">
+                        <option value="">--Status--</option>
+                        {% for each_status in case_status %}
+                        <option value="{{each_status.0}}" {% if request.POST.status %}
+                          {% ifequal each_status.0 request.POST.status %}selected{% endifequal %}{% endif %}>
+                          {{each_status.1}} </option>
+                        {% endfor%}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Priority</label>
+                      <select class="form-control" id="id_priority" name="priority">
+                        <option value="">--Priority--</option>
+                        {% for each_priority in case_priority %}
+                        <option value="{{each_priority.0}}" {% if request.POST.priority %}
+                          {% ifequal each_priority.0 request.POST.priority %}selected{% endifequal %}{% endif %}>
+                          {{each_priority.1}} </option>
+                        {% endfor%}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Category</label>
+                      <select class="form-control" id="id_case_type" name="case_type">
+                        <option value="">--Select Category--</option>
+                        {% for ct in case_case_type %}
+                        <option value="{{ct.0}}" {% if request.POST.case_type %}
+                          {% ifequal ct.0 request.POST.case_type %}selected{% endifequal %}{% endif %}>{{ct.1}}</option>
+                        {% endfor %}
+                      </select>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Account</label>
+                      <select class="form-control" id="id_account" name="account">
+                        <option value="">--Select Account--</option>
+                        {% for ac in accounts %}
+                        <option value="{{ac.id}}" {% ifequal acc ac.id %} selected {% endifequal %}>{{ac.name}}</option>
+                        {% endfor %}
+                      </select>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter_col col-md-2">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Date</label>
+                      <input id="datepicker" class="form-control" type="datepicker" name="date" value="{{date}}"
+                        placeholder="Select Date" />
+  
+                    </div>
+                  </div>
+                  <input type="hidden" id="per_page_field" name="per_page">
+                  <div class="filter_col text-left col-2">
+                    <div class="form-group buttons_row text-center">
+                      <button class="btn btn-success" style="font-size: 16px;" id="filter_click" type="submit">Search</button>
+                      <a href="{% url 'cases:list' %}" id="filter_clear" class="btn btn-danger">Clear</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table_container_row row marl ">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="panel-heading-list card-title text-right">
+              <span class="total_count float-left">Individual - Cases List</span>
+              <span class="filter_toggle ">
+                <a href="#" class="primary_btn"><i class="fas fa-filter"></i> Filter</a>
+              </span>
+            </div>
+            <div class="table-responsive">
+              <table id="exampleTable" class="table" cellspacing="0" style="width:100%">
+                <thead  class="theadhover">
+                  <tr>
+                    <th width="5%">S.No</th>
+                    <th width="15%">Name</th>
+                    <th width="8%">Account</th>
+                    <th width="9%">Status</th>
+                    <th width="9%">Priority</th>
+                    <th width="12%">Category</th>
+                    <th width="15%">Created On</th>
+                    <th width="15%">Actions</th>
+                    <th width="30%">SLA</th>
+                  </tr>
+                </thead>
+                <tbody class="theadhover">
+                  {% if per_page %}
+                  {% paginate per_page data %}
+                  {% else%}
+                  {% paginate 10 data%}
+                  {% endif %}
+                  {% for d in data %}
+                
+                  <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                      <a href="#" data-toggle="modal" style="color:#454545;font-size:1rem;"
+                        data-target="#exampleModalView_case{{d.id}}">{{ d.name }}</a>
+                    </td>
+                    <td>
+                      {% if d.account %}
+                      {{ d.account }}
+                      {% else %}
+                      No Related Account
+                      {% endif %}
+                    </td>
+                    <td>{{d.status}}</td>
+                    {% if d.priority == 'Critical' %}
+                    <td> <span class="red" id="prity1">{{ d.priority }}</span></td>
+                    {% else %}
+                    <td> <span class="green" id="prity2">{{ d.priority }}</span></td>
+                    {% endif %}
+                    <td>{{d.case_type}}</td>
+                    <td> {{d.created_on|date:"M d,Y H:i:s"}}</td>
+
+                    <td class="actions">
+                      
+                      <a href="#" data-toggle="modal" class="btn btn-info view" data-target="#exampleModalView_case{{d.id}}" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="{% url 'cases:edit_case' d.id %}" class="btn btn-success edit" title="Edit"><i
+                          class="fas fa-pencil-alt"></i></a>
+                      {% if request.user == case.created_by or request.user.role == "ADMIN" or request.user.is_superuser %}
+                      <a href="{% url 'cases:remove_case' d.id %}" class="btn btn-danger delete remove_case"
+                        title="Delete"><i class="fas fa-trash-alt"></i></a>
+                      {% if d.status != 'Closed' %}
+                      <a onclick="close_case({{d.id}}, '{% url 'cases:close_case' %}')" class="btn btn-secondary"
+                        title="Close"><i class="fas fa-times"></i> </a>
+                      {% endif %}
+                      {% endif %}
+                    </td>
+                    <td>
+                      <div id="redss{{forloop.counter0}}">
+                        <h5>
+                          <span id="h{{forloop.counter0}}"></span>:
+                          <span id="m{{forloop.counter0}}"></span>:
+                          <span id="s{{forloop.counter0}}"></span>
+                        </h5>
+  
+                        <p id="timers{{forloop.counter0}}"></p>
+                      </div>
+                      <p id="casss{{forloop.counter0}}" style="display: none;"></p>
+  
+                    </td>
+                  </tr>
+                  <div id='sla{{forloop.counter0}}' style="display: none;">{{d.sla|date:"M d,Y H:i:s"}}</div>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% ifequal cases|length 0 %}
+            <h6 class="text-center">No Cases Records Found</h6>
+            {% endifequal %}
+            <div class="marl row text-center">
+              {% show_pages %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> -->
+{% for case_record in top %}
+
+<div class="modal fade" id="exampleModalView_case{{case_record.id}}" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="color:#007bff" id="exampleModalLongTitle">Case-Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <div class="filter_col " id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_name" data-name="name">Name</label></div>
+              <div class="col-md-7"><div class="case_field" id="case_name" data-name="name">{{ case_record.name }}</div></div>
+            </div>
+          </div>
+          
+          <div class="filter_col" id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_email" data-name="name">Email</label></div>
+              {% if case_record.email %}
+              <div class="col-md-7"><div class="case_field" id="case_email" data-name="name">{{ case_record.email }}</div></div>  
+              {% else %}
+              <div class="col-md-7"><div class="case_field">Not Specified</div></div>    
+              {% endif %}        
+            </div>
+          </div>
+
+          <div class="filter_col" id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_phone1" data-name="name">Phone</label></div>
+              {% if case_record.phone1 %}
+              <div class="col-md-7"><div class="case_field" id="case_phone1" data-name="name">{{ case_record.phone1 }}</div></div>
+              {% else %}
+              <div class="col-md-7"><div class="case_field">Not Specified</div></div>    
+              {% endif %}        
+            </div>
+          </div>
+
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_priority" data-name="name">Priority</label></div>
+              {% if case_record.priority %}
+              <div class="col-md-7"><div class="case_field" id="case_priority" data-name="name">{{ case_record.priority }}</div></div>
+              {% else %}
+              <div class="col-md-7"><div class="case_field">Not Specified</div></div>    
+              {% endif %}
+            </div>
+          </div>
+
+         
+          <div class="filter_col">            
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_case_type" data-name="name">Category</label></div>
+              {% if case_record.case_type %}
+              <div class="col-md-7"><div class="case_field" id="case_case_type" data-name="name">{{ case_record.case_type }}</div></div>
+              {% else %}
+              <div class="col-md-7"><div class="case_field">Not Specified</div></div>    
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_status" data-name="name">Status</label></div>
+              {% if case_record.status %}
+              <div class="col-md-7"><div class="case_field" id="case_status" data-name="name">{{ case_record.status }}</div></div>
+              {% else %}
+              <div class="col-md-7"><div class="case_field">Not Specified</div></div>    
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="filter_col" id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="createdate" data-name="name">Creation Date/Time</label></div>
+              <div class="col-md-7"><div class="case_field" id="case_createdate" data-name="name">{{ case_record.creation_date }}</div></div>
+            </div>
+          </div>
+
+          <div class="filter_col" id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="assigned_date" data-name="name">Assigned Date/Time</label></div>
+              <div class="col-md-7"><div class="case_field" id="case_assigned_date" data-name="name">{{ case_record.assigned_date }}</div></div>
+            </div>
+          </div>
+
+          
+          <div class="filter_col" id="iname">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="remark" data-name="name">Remarks</label></div>
+              {% if case_record.remark %}
+              <div class="col-md-7"><div class="case_field" id="case_remark" data-name="name">{{ case_record.remark }}</div></div>
+              {% else %}
+              <div class="col-md-7"><div class="case_field">Not Specified</div></div>
+              {% endif %}
+            </div>
+          </div>
+
+          
+          
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_description" data-name="name">Description</label></div>
+              {% if case_record.description %}
+              <div class="col-md-7"><div class="case_field" id="case_description" data-name="name">{{ case_record.description }}</div>
+              {% else %}
+              <div class="col-md-7"><div class="case_field">Not Specified</div></div>
+              {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="filter_col">
+            <div class="row form-group">
+              <div class="col-md-5"><label class="case_field_label" for="id_description" data-name="name">Created by</label></div>
+              <div class="col-md-7"><div class="case_field" id="case_description" data-name="name">{{ case_record.created_by }}</div>
+              </div>
+            </div>
+          </div>
+
+          <table>
+            <th>a</th>
+            <tr>
+              <td>ab</td>
+            </tr>
+          </table>
+          
+        </div>
+
+      </div>
+    </div>
+
+    <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+  </div>
+</div>
+
+
+
+{% endfor %}
+
+
+<!-- main_container ends here -->
+{% endblock %}
+{% block js_block %}
+
+<script>
+// $(document).ready(function() {
+//   dataTable = $("#exampleTable").DataTable()
+// })
+</script>
+<script>
+  // Add active class to the current button (highlight it)
+  var header = document.getElementById("myDIV");
+  var btns = header.getElementsByClassName("buto");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function() {
+    var current = document.getElementsByClassName("tab12");
+    current[0].className = current[0].className.replace(" tab12", "");
+    this.className += " tab12";
+    });
+  }
+  </script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+    $("#tab1").click(function () {
+
+      $("#all").show()
+      $("#ind").hide()
+    });
+    $("#tab2").click(function () {
+
+      $("#ind").show()
+      $("#all").hide()
+    })
+  });
+
+  //  for sla timer function
+  var newarraa = [];
+  var c_count = document.getElementById('multiselect').rows.length
+  console.log('count', c_count-1)
+  tot=c_count-1;
+  for (var i = 0; i < tot; i++) {
+    var s = 'sla' + i
+    console.log('------------', s)
+    var t1 = document.getElementById(s).innerText;
+    var countDownDate = new Date(t1);
+    console.log("********************",countDownDate)
+    newarraa.push(countDownDate);
+  }
+  var x = setInterval(function () {
+    for (j = 0; j < newarraa.length; j++) {
+      var hh = 'hh' + j
+      var mm = 'mm' + j
+      var ss = 'ss' + j
+      var ti = 'timer' + j
+      var dis = 'reds' + j
+      var cas = "status_id" + j
+      var cas2= "cass" + j
+      var t2 = document.getElementById(cas).innerText;
+      // Get todays date and time
+      var now = new Date().getTime();
+      // Find the distance between now and the count down date
+      var distance = newarraa[j] - now;
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // Display the result in the element with id="demo"
+      if (t2 == "Closed") {
+        document.getElementById(cas2).innerHTML = "Case closed";
+        document.getElementById(cas2).style.color = "green";
+        document.getElementById(cas2).style.display = "block"; 
+        document.getElementById(dis).style.display = "none"; 
+        // document.getElementById('casss'+j).innerHTML = "Case closed";
+        // document.getElementById('casss'+j).style.color = "green";
+        // document.getElementById('casss'+j).style.display = "block"; 
+        // document.getElementById('redss'+j).style.display = "none"; 
+
+
+      }
+      else {
+        document.getElementById(hh).innerHTML = hours
+        document.getElementById(mm).innerHTML = minutes
+        document.getElementById(ss).innerHTML = seconds
+        // document.getElementById('h'+j).innerHTML = hours
+        // document.getElementById('m'+j).innerHTML = minutes
+        // document.getElementById('s'+j).innerHTML = seconds
+
+
+      }
+      if (minutes <= 22) {
+        document.getElementById(dis).style.color = "red"
+        // document.getElementById('redss'+j).style.color = "red"; 
+      }
+      // If the count down is finished, write some text 
+      if (distance < 0) {
+          document.getElementById(ti).innerHTML = "EXPIRED";
+          document.getElementById(hh).innerHTML = "00"
+          document.getElementById(mm).innerHTML = "00"
+          document.getElementById(ss).innerHTML = "00"
+          // document.getElementById('timers'+j).innerHTML = "EXPIRED";
+          // document.getElementById('h'+j).innerHTML = "00"
+          // document.getElementById('m'+j).innerHTML = "00"
+          // document.getElementById('s'+j).innerHTML = "00"
+        
+        }    
+    }
+  }, 1000);
+</script>
+<script type="text/javascript">
+  function close_case(x, url) {
+    var stat = $("#status_id" + x).text()
+    if (stat === "Closed") {
+      alert("Case Already Closed")
+    }
+    else {
+      $.post(url, {
+        "case_id": x
+      }, function (data) {
+        location.reload();
+      })
+    }
+  }
+
+  $(document).ready(function () {
+    $(".filter_toggle").click(function () {
+      $(".list_filter_row").toggle();
+    });
+  });
+  $('#id_account').select2();
+  search = "{{search}}"
+
+  if (search == 'True') {
+    $(".list_filter_row").show();
+  }
+
+  $('.remove_case').click(function (e) {
+    e.preventDefault()
+    url = $(this).attr('href')
+    if (!confirm('Are you sure you want to delete?'))
+      return;
+    window.location = $(this).attr('href')
+  });
+
+  $("a[rel='page']").click(function (e) {
+    e.preventDefault();
+    $('#cases_filter').attr("action", $(this).attr("href"));
+    $('#cases_filter').submit();
+  });
+
+
+  $('#datepicker').datepicker({
+    dateFormat: 'yy-mm-dd'
+    , maxDate: '0'
+  })
+
+</script>
+{% endblock js_block %}

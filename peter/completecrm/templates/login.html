@@ -1,0 +1,194 @@
+{% load staticfiles %}
+{% load compress %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuarcpro IMS</title>
+  <!-- Bootstrap core CSS -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.0/css/bootstrap.min.css" />
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+  <!-- Custom styling plus plugins -->
+  <!-- <link href="http://zoogletech.com/crmscss/main.css"  rel="stylesheet"> -->
+  <link href="/static/css/main1.css"  rel="stylesheet">
+  <link rel="icon" type="image/png" href="/static/images/a.ico" />
+
+  {% block extralinks %}{% endblock %}
+</head>
+
+<body class="login_register_body">
+  {% if messages %}
+  <ul style="font-size: 1.5em;" class="text-center mt-5">
+    {% for message in messages %}
+    {{ message|safe }}
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <div class="container container-class">
+    <div class="topad">
+      <div class="col-md-12">
+        <div class="row">
+          <!-- <div class="col-md-1"></div> -->
+          <div class="col-md-5 image-top ">
+            <div class="login">
+              <div class="form_login">
+                <form  method="POST" action="">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email" name="email">
+                    <span class="error">{{form.email.errors}}</span>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
+                    <span class="error">{{form.password.errors}}</span>
+                  </div>
+                  
+                  <button type="submit" class="btn btn-primary btn-lg btn-block mt-5">Login</button>
+                  &nbsp;
+                  {% if ENABLE_GOOGLE_LOGIN and GP_CLIENT_SECRET and GP_CLIENT_ID %}
+                  <a href="{% url 'common:google_login' %}" class="btn btn-primary">Google Login</a>
+                  {% endif %}
+                  <div class="float-right mt-2"><a href="{% url 'common:password_reset' %}"><b>Forget Password</b></a></div>
+                  {% if error %}
+                  <div class="error mt-3 ">{{ message }}</div>
+                  {% endif %}
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7 hidden-sm hidden-md image-view">
+            <div class="design_form">
+              <div class="login_image  text-center">
+                <img src="../static/images/company_logo.png" alt="SuiteCRM" style="margin: 5px 0;width: 90%;padding:5px;">
+              </div>
+              <div class="text-center text_helo">
+                Hello
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<style>
+  body {
+    background-color: #DBE1EE !important;
+  }
+    .image-top {
+      background-color: #fff !important;
+      padding-top:50px;
+    /* padding-bottom:150px; */
+      border-radius: 25px 0px 0px 25px;
+  }
+.design_form {
+  padding-top: 90px;
+}
+  @media only screen and (max-width: 600px) {
+    .image-top {
+          border-radius: 25px 25px !important;
+    }
+  }
+  .text_helo {
+    color:#fff;
+    padding-top:15px;
+    font-size: 2.5rem;
+    font-weight: 800;
+  }
+
+  .form_login {
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-top: 35px;
+    padding-bottom: 60px;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .form_login {
+      padding-left: 15px !important;
+      padding-right: 15px !important;
+      padding-top: 25px !important;
+    }
+  }
+  .login_image{
+    /* padding:30px; */
+    /* margin-top: 120px; */
+    padding-top:15px;
+    margin-left:60px;
+    margin-right:60px;
+    padding-bottom: 15px;
+    background-color: #fff;
+  }
+
+  @media only screen and (max-width: 600px) {
+        .login_image{
+          padding:15px !important;
+        }
+      }
+
+  .Forget {
+    padding-bottom: 10px;
+  }
+  .container-class {
+    margin-top:40px;
+  }
+  @media only screen and (max-width: 600px) {
+    .container-class {
+      margin-top:0px !important;
+    }
+      }
+  .box-radius {
+    margin-top:60px;
+  }
+  .topad{
+    margin: 0 auto;
+    /* width: 1024px; */
+   }
+   @media only screen and (max-width: 600px) {
+    .topad{
+      margin: 0 auto;
+      padding-bottom: 30px !important;
+    }
+      }
+  .image-view{
+    /* background-image: url(../static/images/image_login.png); */
+    background-color: #4064e3 !important;
+    border-radius: 0px 25px 25px 0px;
+   }
+   @media only screen and (max-width: 600px) {
+    .image-view{
+      display: none !important;
+      }
+    }
+  .form-control{
+    background-image: none, url(../../../../../themes/SuiteP/images/login_bg.png);
+    background-position: 5px -57px;
+    background-repeat: no-repeat;
+  }
+.btn-danger{
+  background-color: rgb(101,105,122) !important;
+    border-color:rgb(101,105,122) !important;
+    color: #fff!important;
+}
+.btn-danger:hover{
+  background-color: #03a9f4 !important;
+  border-color:#03a9f4 !important;
+
+    border: none;
+
+}
+
+</style>
+</body>
+
+
+</html>

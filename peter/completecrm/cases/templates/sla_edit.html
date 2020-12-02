@@ -1,0 +1,491 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+
+{% block breadcrumb %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<style>
+.color {
+  background-color: rgb(228, 161, 38);
+}
+.line{
+    margin: 0 0 12px 0 !important;
+  }
+  .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+{% endblock %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'cases:slalist' %}">SLA</a></li>
+    <li class="breadcrumb-item active">{% if case_obj %}Edit{% else %}Create{% endif %}</li>
+  </ol>
+</nav>
+{% endblock %}
+{% block content %}
+<form id="submitForm2" method="POST" action="{% url 'cases:allslaedit' pk=id %}" novalidate enctype="multipart/form-data">
+  <div class="overview_form_block row marl justify-content-center">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mt-3 mb-3">
+            <span>SLA POLICIES - VOICE</span>
+          </div>
+          <div class="row marl no-gutters">
+            <table class="table table-bordered">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">CASE STAGES</th>
+                  <th scope="col">RESPOND WITHIN</th>
+                  <th scope="col">ESCALATE TO</th>
+                  <th scope="col">ESCALATION EMAIL</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in edit %}
+                <tr>
+                  <td scope="row"><b>open</b></td>
+                  <td>
+                      <input type="time" id="appt1" name="voiceopentime" value="{{ s.voiceopen_respond_within|time:'H:i'}}"  required> Hours
+                  </td>
+                  <td>
+                      <select name ="vuser" class="form-control">
+                        {% for u in user_list %}
+                          <option  value={{u.id}}>{{u.username}}</option>
+                        {% endfor %}
+                          
+                      </select>
+                  </td>
+                  <td>
+                      <label class="switch">
+                          <input type="checkbox" checked>
+                          <span class="slider round"></span>
+                      </label>
+                  </td>
+                  
+                </tr>
+                <tr>
+                  <td scope="row"><label name="progress_voice"><b>In Progress</b></label></td>
+                  <td><input type="time" style="width:81px" id="appt3" name="voiceprogresstime" value="{{ s.voiceprogress_respond_within|time:'H:i'}}" required> Hours</td>
+                  <td>
+                      <select name="puser" class="form-control">
+                        {% for u in user_list %}
+                        <option value={{u.id}}>{{u.username}}</option>
+                        {% endfor %}
+                      </select>
+                  </td>
+                  <td>
+                      <label class="switch">
+                          <input type="checkbox" checked>
+                          <span class="slider round"></span>
+                      </label>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mb-3 mt-3">
+            <span>SLA POLICIES - EMAIL</span>
+          </div>
+          <div class="row marl no-gutters">
+            <table class="table table-bordered">
+                <thead  class="thead-light">
+                  <tr>
+                    <th scope="col">CASE STAGES</th>
+                    <th scope="col">RESPOND WITHIN</th>
+                    <th scope="col">ESCALATE TO</th>
+                    <th scope="col">ESCALATION EMAIL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for s in edit %}
+                  <tr>
+                    <td scope="row"><label><b>Open</b></label></td>
+                    <td>
+                        <input type="time" id="appt" name="emailopentime" value="{{s.emailopen_respond_within|time:'H:i'}}"  required> Hours
+                    </td>
+                    <td>
+                        <select name="euser" class="form-control">
+                          {% for u in user_list %}
+                          <option value="{{u.id}}">{{u.username}}</option>
+                        {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                      <label class="switch">
+                          <input type="checkbox" checked>
+                          <span class="slider round"></span>
+                      </label>
+                    </td>
+    
+                  </tr>
+                  <tr>
+                    <td scope="row"><label><b>In Progress</b></label></td>
+                    <td><input type="number" style="width:81px" id="appt4" name="emailprogressday" value="{{s.emailprogress_respond_within}}" required> Days</td>
+                    <td>
+                      <select name="p_user" class="form-control">
+                        {% for u in user_list %}
+                        <option value="{{u.id}}">{{u.username}}</option>
+                      {% endfor %}
+                      </select>
+                    </td>
+                    <td>
+                      <label class="switch">
+                          <input type="checkbox" checked>
+                          <span class="slider round"></span>
+                      </label>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <button class="btn btn-success" type="submit" id="submit">Submit</button>
+        <button class="btn color" type="reset" id="reset" style="color:#fff;font-size:16px;">Reset</button>
+        <a href="{% url 'cases:allslalist' %}"><buton class="btn btn-danger">Cancel</buton></a>
+      </div>
+    </div>
+  </div>
+
+
+
+</form>
+<div class="row marl justify-content-center text-center mt-5 mb-5" id="progress_bar">
+  <div class="progress position-relative" style="width:40%;height:1.5rem;">
+    <span class="justify-content-center d-flex position-absolute w-100 percent">0%</span>
+    <div class="progress-bar bar"></div>
+  </div>
+</div>
+{% endblock %}
+{% block js_block %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://malsup.github.io/jquery.form.js"></script>
+<script type="text/javascript">
+
+  var bar = $('.bar');
+  var percent = $('.percent');
+
+  $('#progress_bar').hide()
+  $('#_id_assigned_to').select2({ disabled: 'readonly' });
+
+
+  $('form#submitForm').ajaxForm({
+    type: 'POST',
+    dataType: 'json',
+    url: ".",
+    data: $('#submitForm').serialize(),
+    beforeSubmit: disableButton,
+    beforeSend: function () {
+      var percentVal = '0%';
+      bar.width(percentVal);
+      percent.html(percentVal);
+    },
+    uploadProgress: function (event, position, total, percentComplete) {
+      var percentVal = percentComplete + '%';
+      bar.width(percentVal);
+      if (percentVal == '100%') {
+        percent.html('Uploading ...')
+      }
+      else {
+        percent.html(percentVal);
+      }
+    },
+    success: function (data) {
+      if (data.error) {
+        $('#progress_bar').hide()
+        $('.error_message').html('')
+        for (var key in data.errors) {
+          $('#error_id_' + key).html("<p>" + data.errors[key][0] + "</p>");
+        };
+        $('#submit_btn').removeAttr('disabled')
+      }
+      else {
+        window.location = data.success_url;
+      }
+    }
+  });
+
+
+  $('#submit_btn').click(function () {
+    var file = $('#case_attachment')[0].files[0];
+    console.log("file",file)
+    if (file && file.name.length > 0) {
+      var percentVal = '0%';
+      bar.width(percentVal);
+      percent.html(percentVal);
+      $('#progress_bar').show()
+    }
+
+  });
+
+  function disableButton() {
+    // $('#progress_bar').show()
+    $('#submit_btn').attr('disabled', 'disabled')
+  }
+
+  $(function () {
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    $('#id_closed_on').datetimepicker({
+      'format': 'YYYY-MM-DD',
+      minDate: today
+    })
+  });
+
+  $(".savenew").on('click', function (e) {
+    e.preventDefault()
+    $("#save_new_form").val('true')
+    $('#submitForm').submit()
+  });
+  $(document).ready(function () {
+    $('.assigned_users').select2();
+    $("#id_contacts").select2();
+    $("#id_teams").select2();
+  });
+
+  $('#id_account').change(function () {
+    var account = $("#id_account").val()
+    $.get("{% url 'cases:select_contacts' %}", { "account": account }, function (data) {
+      $("#id_contacts").html("")
+      $.each(data, function (index, value) {
+        $("#id_contacts").append("<option value=" + index + ">" + value + "</option>")
+      });
+    })
+  });
+
+  function remove_attachment(x) {
+    const con = confirm("Do you want to Delete it for Sure!?");
+    if (con == true) {
+      $.post('{% url "cases:remove_attachment" %}', {
+        "attachment_id": x
+      }, function (data) {
+        if (data.error) {
+          alert(data.errors)
+        } else {
+          $("#attachment" + data.attachment_object).remove()
+        }
+      })
+    }
+  }
+
+  $("#id_teams").change(function (e) {
+    try {
+      var users = []
+      $('#id_teams option:selected').each(function () {
+        // users.push($(this).attr('data-users'))
+        _data = $(this).attr('data-users');
+        if (!users) {
+          // users = []
+        } else {
+          users = users.concat(_data.split(','))
+        }
+      })
+      // users = $('option:selected', this).attr('data-users')
+      // if (!users) {
+      //   users = []
+      // } else {
+      //   users = users.split(',')
+      // }
+      console.log('selected users teams data', users)
+      var existingUsers = $('#id_assigned_to').val();
+      var allUsers = users.concat(existingUsers)
+      console.log(existingUsers)
+      if (users.length) {
+        $('#_id_assigned_to').select2().val(allUsers).trigger('change');
+
+      }
+    } catch (error) {
+      console.log(error)
+      $('#_id_assigned_to').select2().val(existingUsers).trigger('change');
+    }
+
+  });
+</script>
+<script>
+
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   const webSocketBridge = new channels.WebSocketBridge();
+  //   const nl = document.querySelector("#notifylist");
+
+  //   webSocketBridge.connect('/contatcts/');
+  //   webSocketBridge.listen(function (action, stream) {
+  //     console.log("RESPONSE:", action);
+  //     if (action.event == "New User") {
+  //       var el = document.createElement("li");
+  //       // el.innerHTML = `A user <b>${action.user}</b> `;
+  //       var fl1 = action.username
+  //       var fl2 = action.phone
+  //       var fl3 = action.mails
+  //       var fl4 = action.lastname
+  //       console.log('iiuiyiyiyuui')
+  //       // document.getElementById('id_first_name').value = fl1
+  //       // document.getElementById('id_last_name').value = fl4
+  //       document.getElementById('id_name').value = fl2
+  //       // document.getElementById('id_email').value = fl3
+  //       openForm(action.phone, action.username, action.user)
+  //       // nl.appendChild(el);
+  //       console.log('new')
+
+  //     }
+  //     else {
+  //       console.log("old user")
+  //       openForm(action.phone, action.username, action.user)
+
+
+  //     }
+  //   })
+  //   document.ws = webSocketBridge; /* for debugging */
+  // })
+  // function openForm(av, vc) {
+  //   var sound = document.getElementById("audio");
+  //   sound.play()
+  //   console.log('dddddd', vc)
+  //   document.getElementById('po').innerHTML = vc
+  //   document.getElementById('io').innerHTML = av
+  //   document.getElementById("myForm").style.display = "block";
+
+  // }
+
+  // function closeForm() {
+  //   document.getElementById("myForm").style.display = "none";
+  // }
+  
+  var nsew = localStorage.getItem('contact')
+
+  if (localStorage.getItem("contact") === null) 
+{
+ 
+  var nam = localStorage.getItem('name')
+  var ph = localStorage.getItem('phone')
+  if (localStorage.getItem("name")===null){
+    console.log('sucess')
+  }
+  else{
+  window.onload = document.getElementById('id_name').value = nam
+  window.onload = document.getElementById('id_phone1').value = ph
+  window.onload = localStorage.removeItem("name")
+  window.onload = localStorage.removeItem("phone")
+  }
+  }
+  else{
+    var nsew1 = localStorage.getItem('contact')
+  var nsew2 = localStorage.getItem('ph')
+  window.onload = document.getElementById('id_name').value = nsew1
+  window.onload = document.getElementById('id_phone1').value = nsew2
+  window.onload = localStorage.removeItem("contact")
+  window.onload = localStorage.removeItem("ph")
+  }
+</script>
+<style>
+  .pannel {
+    background: #f1eff1 !important;
+    color: #2a2a2b !important;
+    padding: 0 !important;
+    height: 32px !important;
+    border-color: #ebe9ec !important;
+  }
+  .te{
+    margin: 0 0 12px 0 !important;
+  }
+  .vj{
+    background: url(/static/images/select.ico) no-repeat right #fff !important;
+    /* background-color: #fff; */
+    background-size: 31px 52px !important;
+    color: #65697a !important;
+    padding: 0 52px 0 5px !important;
+    border-color: #a5e8d6 !important;
+    border-style: solid !important;
+    /* border-radius: 4px !important; */
+    line-height: 28px !important;
+    outline: 0 !important;
+    /* height: 28px !important; */
+    
+
+  }
+  .save{
+    background-color: #00235a !important;
+
+  }
+  .save:hover{
+    background-color: #0d8fc7 !important;
+
+  }
+  .savenew{
+    border: none !important; 
+
+  }
+  .clear{
+    background-color: #00235a !important;
+    border: none !important; 
+    border-radius: 0 !important;
+    color: white !important;
+  }
+  
+</style>
+{% endblock js_block %}

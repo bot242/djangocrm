@@ -1,0 +1,775 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% block extralinks %}
+<style>
+  .align-items-center {
+    align-items: center!important;
+    width: 100% !important;
+}
+  .text_ellipsis {
+    width: 16em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  section.dashboard-count .row {
+    padding: 15px 15px;
+    margin: 0;
+    margin-top: 85px;
+  }
+
+  section.dashboard-count .title {
+    font-size: 1.3em;
+    font-weight: 300;
+    color: #fff;
+    margin: 0 20px !important;
+  }
+  .title1 {
+    float:left;
+    font-size: 1.3em;
+    font-weight: 300;
+    color: #fff;
+    margin: 0 20px !important;
+  }
+
+  section.dashboard-counts .row {
+    /* padding: 30px 15px; */
+    margin: 0;
+    /* margin-top: 30px !important; */
+  }
+
+  section.dashboard-counts div[class*='col-'] .item {
+    /* border-right: 1px solid #eee; */
+    padding: 15px 0;
+    text-align: center !important;
+    /* padding-left: 30px; */
+  }
+
+  section.dashboard-counts div[class*='col-'] .item1 {
+    border-right: 1px solid #eee;
+    padding: 15px 0;
+    text-align: center !important;
+    /* padding-left: 30px; */
+  }
+
+  section.dashboard-counts .title {
+    font-size: 1.0em;
+    font-weight: 530;
+    color: #fff;
+    width:100%;
+    /* margin: 0 20px; */
+  }
+
+  section.dashboard-counts .number {
+    font-size: 1.3em;
+    color: #fff;
+    font-weight: 300;
+  }
+  section.dashboard-counts .number1 {
+    font-size: 1.0em;
+    color: #fff;
+    font-weight: 300;
+    padding-top: 3px;
+    padding-bottom: 5px;
+  }
+
+  section.dashboard-counts .progress {
+    margin-top: 10px;
+    /* height: 4px; */
+  }
+
+  .colr1 {
+    background-image: linear-gradient(45deg, #5b2bea 0%, #2f75ff 90%) !important;
+    padding: 20px 12px 20px 12px;
+    border-radius: 3px;
+  }
+
+  .colr2 {
+    background-image: linear-gradient(45deg, #f36d2c 0%, #ffb922 90%) !important;
+    padding: 20px 12px 20px 12px;
+    border-radius: 3px;
+  }
+
+  .colr3 {
+    background-image: linear-gradient(45deg, #ff2b6a 0%, #ff6b00 90%) !important;
+    padding: 20px 12px 20px 12px;
+    border-radius: 3px;
+  }
+
+  .colr4 {
+    background-image: linear-gradient(45deg, #01ab8f 0%, #8bc344 90%) !important;
+    padding: 20px 12px 20px 12px;
+    border-radius: 3px;
+  }
+
+  .colr22 {
+    background-image: linear-gradient(45deg, #ab3ad7 0%, #e087f8 90%) !important;
+    padding: 20px 12px 20px 12px;
+    border-radius: 3px;
+  }
+
+  .progress-bar {
+    background-color: #ffc107 !important;
+  }
+
+  .colr {
+    background-color: #fff !important;
+    border: 1px solid rgb(185, 182, 182);
+  }
+
+  .tem {
+    padding: 15px 0 !important;
+    text-align: center !important;
+  }
+
+  .tit {
+    font-size: 1.3em;
+    font-weight: 300;
+    color: rgb(109, 107, 107);
+    margin: 0 20px;
+  }
+
+  .num {
+    font-size: 1.8em;
+    color: rgb(109, 107, 107);
+    font-weight: 300;
+  }
+
+  .but {
+    padding-left: 70px;
+    margin-top: 30px;
+  }
+
+  @media (min-width: 992px) {
+    .w-lg-20 {
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 20%;
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
+  }
+
+  .btns {
+    border: none;
+    outline: none;
+    /* padding: 10px 16px; */
+    /* background-color: #f1f1f1; */
+    border: 1px solid #007bff;
+    cursor: pointer;
+    /* font-size: 18px; */
+  }
+
+  /* Style the active class, and buttons on mouse-over */
+  .active,
+  .btns:hover {
+    background-color: #007bff;
+    color: white;
+  }
+.dot1 {
+  background-color: #4e01a5;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+}
+.dot2 {
+  background-color: #ab5000;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+}
+.dot3 {
+  background-color: #018150;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+}
+.dot4 {
+  background-color: #9924c6;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+}
+.dot5 {
+  background-color: #ac0229;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+  color: #fff;
+}
+.heading {
+  padding:0px;
+}
+.fa-2x {
+    font-size: 1.5em;
+}
+body {
+    font-family: "Quicksand", sans-serif;
+    padding: 0;
+    font-weight: 500;
+    margin: 0 !important;
+    font-size: 14px;
+    background: #ffffff;
+}
+.borderless th {
+    border: none;
+}
+
+</style>
+{% endblock %}
+{% block content %}
+{% load common_tags %}
+<!-- <a href="{% url "common:logout" %}"><button class="btn btn-primary" type="button">Logout</button></a> -->
+<div class="col-md-12">
+  <div class="row heading2">
+    <div class="title1  float-left" style="color: #aaa;"><b>Service Dashboard</b></div>
+</div>
+
+
+</div>
+
+<div class="col-md-12 ">
+  <div class="row">
+
+    <div class="col-md-6" id="myDIV">
+    {% if request.user.is_superuser %}
+    <a href="{% url 'common:casedashboard' %}">
+        <button type="button" class="btn btn-outline-primary btns mr-3 pb-2 " id="tab1">
+          All
+        </button>
+      </a>
+      <a href="{% url 'common:individual' %}">
+        <button type="button" class="btn btn-outline-primary btns active pb-2" id="tab2">
+          Individual
+        </button>
+      </a>
+    {% endif %}
+    </div>
+    <!-- <div class="col-md-3 float-right"> -->
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label class="form-control-label pl-1 pr-3 pt-3"><b>From Date</b></label>
+          <div class="pr-3 pt-2">
+            <input required id="datepicker" style="width:200px" type="text"  class="form-control"  name="date" value="{{date}}" placeholder="Select Date" />
+          </div>
+          <label class="form-control-label pl-1 pr-3 pt-3"><b>To Date</b></label>
+          <div class="pt-2">
+            <input required id="topicker" style="width:200px" type="text" class="form-control" name="tod" value="{{tod}}" placeholder="To Date" />
+          </div>
+          <div class="pt-2 pl-4">
+            <form id="date_filter" method="GET" action="{% url 'common:individual' %}" >
+              <input required id="dates" type="hidden" name="status" style="display: none;">
+              <input required id="todate" type="hidden" name="tostatus"  style="display: none;">
+              <!-- <input type="submit" class="btn btn-outline-success" onclick="submit()"> -->
+              <button type="submit" style="width:100px" class="btn btn-success">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    <!-- </div> -->
+  </div>
+</div>
+
+
+<div id="ind">
+  <div class="col-md-12">
+    <section class="dashboard-counts">
+      <!-- <div class="container-fluid"> -->
+      <div class="row">
+        <div class="w-lg-20">
+          <div class="colr1 mr-3">
+            <a class=" d-flex align-items-center" href="{% url 'cases:individual' %}" onclick="event.preventDefault();
+                   document.getElementById('cases_filter').submit();">
+              <div class="d-flex align-items-center">
+                <div class="dot1 bg-violet"><i class="fas fa-briefcase fa-2x"></i></div>
+                <div class="title"><span>Open Cases</span>
+                  <div class="number"><strong>{{open_case}}</strong></div>
+                  <!-- <div class="progress">
+                    <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0"
+                      aria-valuemax="100" class="progress-bar bg-violet"></div>
+                  </div> -->
+                </div>
+                
+              </div>
+            </a>
+            <form id="cases_filter" method="POST" action="{% url 'cases:individual' %}" style="display: none;">
+              <input type="hidden" value="Open" name="status">
+              <input type="submit" value="Open Case">
+            </form>
+          </div>
+        </div>
+        <div class="w-lg-20">
+          <div class="colr2 ml-3 mr-3">
+            <a href="{% url 'cases:individual' %}" onclick="event.preventDefault();
+                             document.getElementById('cases_filter1').submit();">
+              <div class="d-flex align-items-center">
+                <div class="dot2 bg-green"><i class="fas fa-briefcase fa-2x"></i></div>
+                <div class="title"><span>In Progress Cases</span>
+                  <div class="number"><strong>{{inprogress_case}}</strong></div>
+                  <!-- <div class="progress">
+                    <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0"
+                      aria-valuemax="100" class="progress-bar bg-green"></div>
+                  </div> -->
+                </div>
+                
+              </div>
+            </a>
+            <form id="cases_filter1" method="POST" action="{% url 'cases:individual' %}" style="display: none;">
+              <input type="hidden" value="In Progress" name="status">
+              <input type="submit" value="Progress Case">
+            </form>
+          </div>
+        </div>
+        <div class="w-lg-20">
+          <div class="colr4 ml-3 mr-3">
+            <a href="{% url 'cases:individual' %}" onclick="event.preventDefault();
+              document.getElementById('total_case').submit();">
+            <div class="d-flex align-items-center">
+              <div class="dot3 bg-green"><i class="fas fa-briefcase fa-2x"></i></div>
+              <div class="title"><span>Total Cases</span>
+                <div class="number"><strong>{{total_case}}</strong></div>
+                <!-- <div class="progress">
+                  <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0"
+                    aria-valuemax="100" class="progress-bar"></div>
+                </div> -->
+              </div>
+              
+            </div>
+            </a>
+            <form id="total_case" method="POST" action="{% url 'cases:individual' %}" style="display: none;" >
+              <input type="submit" value="Total Case">
+            </form>
+          </div>
+        </div>
+        <div class="w-lg-20">
+          <div class="colr22 ml-3 mr-3">
+            <a href="{% url 'cases:individual' %}" onclick="event.preventDefault();
+                    document.getElementById('cases_filter4').submit();">
+              <div class="d-flex align-items-center">
+                <div class="dot4 bg-red"><i class="fas fa-briefcase fa-2x"></i></div>
+                <div class="title"><span>Top Category</span>
+                  <!-- <span>{{category_name}}</span> -->
+                  <div class="number1"><strong>{{category_name}}</strong></div>
+                  <!-- <div class="progress">
+                    <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0"
+                      aria-valuemax="100" class="progress-bar"></div>
+                  </div> -->
+                </div>
+              </div>
+            </a>
+            <form id="cases_filter4" method="POST" action="{% url 'cases:individual' %}" style="display: none;">
+              <input type="hidden" value="{{category_name}}" name="top_cat">
+              <input type="submit" value="Case type">
+            </form>
+          </div>
+        </div>
+        <div class="w-lg-20">
+          <div class="colr3 ml-3">
+            <div class="d-flex align-items-center">
+              <div class="dot5 bg-red mr-2"><i class="fas fa-briefcase fa-2x"></i></div>
+              <div class="title"><span>Service Level Alert</span>
+                <div class="number"><strong>{{sla | floatformat:"0"}} <span>%</strong></div>
+                <!-- <div class="progress">
+                  <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0"
+                    aria-valuemax="100" class="progress-bar"></div>
+                </div> -->
+              </div>
+            </div>
+            </a>
+             <form id="cases_filter6" method="POST" action="{% url 'cases:individual' %}" style="display: none;">
+                {% for cn in scn %}
+                <input type="hidden" value="{{cn.name}}" name="name">
+                {% endfor %}
+                <input type="submit" value="Case type">
+              </form>
+          </div>
+        </div>
+
+
+      </div>
+      <!-- </div> -->
+    </section>
+  </div>
+  
+  <div class="col-md-12">
+    <!-- <div class="container-fluid"> -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="charts">
+          <div class="row">
+            <div class="col-lg-12 ">
+              <div class="card">
+                <div class="card-header d-flex align-items-center">
+                  <h3 class="h4">Users Case List</h3>
+                </div>
+                <div class="card-body mb-3 mt-1" id="table1">
+                  <div class="table-responsive">
+
+                    <table class="table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>User</th>
+                          <th>Open Cases</th>
+                          <th>In Progress Cases</th>
+                          <th>Closed Cases</th>
+                          <th>Total Cases</th>
+                          <th>Service Level Alert</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for d in data %}
+                        <tr>
+                           <td>
+                          <!--  <a href="{% url 'cases:individual' %}" class="number" onclick="event.preventDefault();
+                            document.getElementById('cases_username_filter').submit();">{{d.username}}</a>   -->
+                            <form id="cases_username_filter" method="POST" action="{% url 'cases:individual' %}" >
+                              <input type="hidden" required id="datepicker"  class="form-control"  name="fdate" value="{{date}}" />
+                              <input type="hidden" required id="topicker" class="form-control" name="tod" value="{{tod}}"/>
+                              <input type="hidden" value="{{d.username}}" name="caseuname">
+                            <input type="submit" value="{{d.username}}" style="border: unset; background: #f2f2f2;" >
+                          </form>
+                          </td>
+                          <td>{{d.open}}</td>
+                          <td>{{d.progress}}</td>
+                          <td>{{d.closed}}</td>
+                          <td>{{d.totalcases}}</td>
+                          <td>{{sla}} %</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+
+                    <!-- <p style="text-align:center">There are no records</p> -->
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </div>
+</div>
+<input id="countcase" type="text" style="display: none;" value="{{countcase}}">
+
+{% endblock %}
+{% block js_block %}
+<script type="text/javascript">
+
+// $("datepicker").attr('required',true); 
+// $("topicker").attr('required',true); 
+
+// date based graph for cases
+Highcharts.chart('datereport', {
+    chart: {
+        type: 'column'
+    },
+     scrollablePlotArea: {
+  
+        // nr of interval data x (40 + 30) where 40 are column width pixels and
+        // 30 is additional distancing between columns;
+        // Increase spacing pixels if needed
+    scrollPositionX: 1
+   },
+    title: {
+        text: 'Report'
+    },
+    credits: false,
+    colors: ['#2f75ff', '#da495b', '#80d0c7'],
+    xAxis: {
+      categories: {{case_open|safe}},
+      crosshair: true,
+      min:0,
+      max:6,
+    },
+
+    scrollbar: {
+        enabled: true
+    },    
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total Status'
+        },
+        tickInterval: 1,
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        // column: {
+        //     pointPadding: 0.5,
+        //     borderWidth: 0,
+        //     // stacking: 'normal',
+        //     // pointWidth: 40,
+        // }
+        areaspline: {
+          fillOpacity: 0.1
+      },
+    },
+    series: [{
+        name: 'Open',
+        data: {{op_case|safe}}
+
+    }, {
+        name: 'In Progess',
+        data: {{op_progress|safe}}
+
+    }, {
+        name: 'Closed',
+        data: {{op_close|safe}}
+
+    }],
+    
+});
+
+
+
+  $(document).ready(function () {
+    $("#tab1").click(function () {
+
+      $("#all").show()
+      $("#ind").hide()
+    });
+    $("#tab2").click(function () {
+
+      $("#ind").show()
+      $("#all").hide()
+    })
+  });
+
+  $(document).ready(function () {
+    $(".tag_class_opp").click(function () {
+      // $(".tag_class_opp").css('cursor', 'pointer')
+      url = "{% url 'opportunity:list' %}"
+      url = url + "?tag=" + $(this).attr('data-link')
+      window.location.href = url;
+    });
+
+    $(".tag_class_acc").click(function () {
+      // $(".tag_class_acc").css('cursor', 'pointer')
+      url = "{% url 'accounts:list' %}"
+      url = url + "?tag=" + $(this).attr('data-link')
+      window.location.href = url;
+    });
+
+  });
+
+
+
+
+  Highcharts.chart('container', {
+    chart: {
+      type: 'pie',
+      options3d: {
+        enabled: true,
+        alpha: 45
+      }
+    },
+    title: {
+      text: 'Incident Status'
+    },
+
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: false
+        },
+        showInLegend: true,
+        
+        innerSize: 100,
+        depth: 45
+      }
+    },
+
+    colors: ['#5b2bea', '#f36d2c', 'rgb(15, 238, 182)'],
+    
+    credits: {
+      enabled: false
+    },
+    series: [{
+      name: 'Status',
+      data: [
+        [name = 'Open', {{open_case}}],
+        [name = 'In Progress', {{ inprogress_case }}],
+        [name = 'Closed', {{ closed_case }}]
+        ],
+    point: {
+      events: {
+        click: function () {
+          // alert ('Status: '+ this.name +', value: '+ this.y);
+          // {}
+          event.preventDefault();
+          document.getElementById('cases_username_filter').submit()
+          if (this.name == "Open") {
+            event.preventDefault();
+            document.getElementById('cases_filter').submit()
+          } else if (this.name == "In Progress") {
+            event.preventDefault();
+            document.getElementById('cases_filter1').submit()
+          } else if (this.name == "Closed") {
+            event.preventDefault();
+            document.getElementById('cases_filter2').submit()
+          }
+          
+        }
+      }
+    }
+  }]
+});
+</script>
+<script>
+  var currentTime = new Date();
+var startDateFrom = new Date(currentTime.getFullYear(),currentTime.getMonth(),1);
+console.log(startDateFrom, "---> startDateFrom")
+var startDateTo = new Date(currentTime.getFullYear(),currentTime.getMonth() +1,0);
+console.log(startDateTo, "startDateTo")
+var today = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate());
+
+// From date picker
+var ftg = document.getElementById('datepicker').value
+console.log(ftg,"---------->>>>>>>>")
+var ftgbn = document.getElementById('topicker').value
+console.log(ftgbn,"---------->>>>>>>>")
+
+
+var myform = document.getElementById('date_filter');
+myform.onsubmit = function(){ 
+  var fromdate = document.getElementById('datepicker').value
+    document.getElementById('dates').value = fromdate
+    var todate = document.getElementById('topicker').value
+    document.getElementById('todate').value = todate
+    myform.submit();
+};
+
+$("#datepicker").datepicker({
+    dateFormat: 'dd-mm-yy',
+    // minDate: startDateFrom,
+    maxDate: '0',
+    onSelect: function(selected) {
+      $("#topicker").datepicker("option","minDate", selected)
+    }
+})
+
+// To date picker
+  $('#topicker').datepicker({
+    dateFormat: 'dd-mm-yy', 
+    maxDate: '0',
+    onSelect: function(selected) {
+      $("#datepicker").datepicker("option","maxDate", selected)
+    }
+  })
+  // .on("input change", function (e) {
+  //   console.log("Date changed: ", e.target.value);
+  //   // var todates = e.target.value
+  //   var fromdate = document.getElementById('datepicker').value
+  //   document.getElementById('dates').value = fromdate
+  //   var todate = document.getElementById('topicker').value
+  //   document.getElementById('todate').value = todate   
+    
+  //   $("#datepicker").datepicker("option","maxDate", todate)
+
+  // })
+var newarraa=[];
+var text;
+var c_count=document.getElementById('countcase').value
+for ( var i=0; i<c_count;i++){
+  var s='sla'+i
+
+  var t1 = document.getElementById(s).innerText;
+  // console.log('*******',i)
+  // console.log(s)
+  // console.log("ttttt",t1)
+  var countDownDate = new Date(t1);
+  // console.log("-----",countDownDate)
+  newarraa.push(countDownDate);
+}
+  var x = setInterval(function() {
+
+    for(j=0;j < newarraa.length;j++){
+      var hh='hh'+j
+  var mm='mm'+j
+  var ss='ss'+j
+  var ti='timer'+j
+  var dis='reds'+j
+  var cas = "status_id" + j
+  var cas2= "cass" + j
+  var t2 = document.getElementById(cas).innerText;
+    // console.log("--->>",newarraa[j]);
+    // console.log("countDownDate:",countDownDate)
+  // Get todays date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = newarraa[j] -now ;
+  // console.log("distance:",distance)
+
+  // Time calculations for days, hours, minutes and seconds
+  var days =  Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours =  ("0" +Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
+  var minutes = ("0" + Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
+  var seconds =  ("0" + Math.floor((distance % (1000 * 60)) / 1000)).slice(-2);
+  // Display the result in the element with id="demo"
+console.log(hours,'999999-case-ind')
+  if (t2 == "Closed") {
+        document.getElementById(cas2).innerHTML = "Case closed";
+        document.getElementById(cas2).style.color = "green";
+        document.getElementById(cas2).style.display = "block"; 
+        document.getElementById(dis).style.display = "none"; 
+      }
+      else {
+        document.getElementById(hh).innerHTML = hours
+        document.getElementById(mm).innerHTML = minutes
+        document.getElementById(ss).innerHTML = seconds
+      }
+      if (distance <= 0) {
+        document.getElementById(dis).style.color = "red"
+      }
+      // If the count down is finished, write some text 
+      if (distance < 0) {
+          document.getElementById(ti).innerHTML = "EXPIRED";
+          document.getElementById(hh).innerHTML = "00"
+          document.getElementById(mm).innerHTML = "00"
+          document.getElementById(ss).innerHTML = "00"
+        }    
+    }
+ 
+}, 1000);
+
+
+</script>
+<script>
+  var header = document.getElementById("myDIV");
+  var btns = header.getElementsByClassName("btn");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function () {
+      var current = document.getElementsByClassName("active");
+      current[0].className = current[0].className.replace(" active", "");
+      this.className += " active";
+    });
+  }
+  $(document).ready(function () {
+    $("#tab1").click(function () {
+      $("#table1").show()
+      $("#table2").hide()
+    });
+    $("#tab2").click(function () {
+      $("#table2").show()
+      $("#table1").hide()
+    })
+  });
+
+
+</script>
+{% endblock js_block %}

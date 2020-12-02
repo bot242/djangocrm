@@ -1,0 +1,128 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% block extralinks %}
+<style>
+  .text_ellipsis {
+    width: 16em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+{% endblock %}
+{% block content %}
+{% load common_tags %}
+<!-- <a href="{% url "common:logout" %}"><button class="btn btn-primary" type="button">Logout</button></a> -->
+<div class="row marl justify-content-center">
+  <div class="col-md-12">
+    <!-- count_blocks_row starts here -->
+    <!-- <div class="row count_blocks_row">
+      
+      <div class="col-md-2">
+        <div class="item green">
+          <a href="{% url 'contacts:list' %}">
+            <i class="fas fa-portrait"></i>
+            <div class="title">Contacts</div>
+            <div class="count">{{contacts_count}}</div>
+          </a>
+        </div>
+      </div>
+   
+      <div class="col-md-2">
+        <div class="item yellow">          
+          <a href="{% url 'cases:list' %}">           
+          <i class="fas fa-calendar-check"></i>                       
+            <div class="title">Cases</div>
+            <div class="count">{{cases}}<br/> </div>
+          </a>
+        </div>
+      </div>
+    </div> -->
+    <!-- count_blocks_row ends here -->
+    <div class="open_sections row">
+      <div class="col-md-6 table_container_row">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              <span>Inbox</span>
+            </div>
+            <div class="table-responsive">
+              <div class="row">
+                {% for user in email %}
+                <div class="col-6">
+                  <p id="email">{{ user.from_address }}</p>
+                </div>
+                <div class="col-6">
+                  <button class="button " id="val"><a style=" color: #FFFFFF" href="{% url 'contacts:emailid' user.id %}">Create Contact</a></button>
+                  <button class="button " id="val1"><a style=" color: #FFFFFF" href="{% url 'contacts:emailid' user.id %}">Create Case</a></button>
+                </div>
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="container" class="col-md-6 table_container_row"></div>
+    </div>
+  </div>
+</div>
+<script>
+
+  var phones=localStorage.getItem("emailuser")
+if (localStorage.getItem('emailuser')===null){
+console.log('print')
+}
+else{
+  // setInterval(function(){ 
+
+  window.onload = document.getElementById('email').innerHTML=phones
+  $("#email").load(location.href + " #email");
+  // window.onload =localStorage.removeItem("emailuser")
+  console.log("ssss")
+// }, 3000);
+
+}
+
+</script>
+<style>
+  #val {
+    display: inline-block;
+    padding: 0.3em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 2em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #FFFFFF;
+    background-color: #f44336;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  #val:hover {
+    background-color: #b4b4b4;
+  }
+
+  #val1 {
+    display: inline-block;
+    padding: 0.3em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 2em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #FFFFFF;
+    background-color: #009688;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  #val1:hover {
+    background-color: #b4b4b4;
+  }
+</style>
+{% endblock %}

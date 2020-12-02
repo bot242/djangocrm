@@ -1,0 +1,180 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+{% endblock %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'cases:list' %}">Cases</a></li>
+    <li class="breadcrumb-item active">SLA List</li>
+  </ol>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="main_container">
+    <!-- heading_create starts here -->
+    <div class="row marl">
+      <div class="col-lg-12 text-right">
+        <span class="d-inline"><a class="primary_btn" href="{% url 'cases:allsla' %}"><i class="fa fa-plus"></i> Add New
+            SLA</a></span>
+      </div>
+    </div>
+
+    <!-- heading_create ends here -->
+    <!-- Sla Row  -->
+    <div class="table_container_row row marl ">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="panel-heading-list card-title text-right">
+              <span class="total_count float-left">SLA</span>
+              <span class="filter_toggle ">
+                <a href="#" class="btn"></a>
+              </span>
+            </div>
+            <div class="table-responsive">
+              {% if sla %}
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>S.No</th>             
+                    <th>Voice Open Status</th>
+                    <th>Voice Open Time</th>
+                    <th>Voice Progress Status</th>
+                    <th>Voice Progress Time</th>
+                    <th>Email Open Status</th>
+                    <th>Email Open Time</th>
+                    <th>Email Progress Status</th>
+                    <th>Email Progress Day</th>
+                    <th width="15%">Action</th>
+                  </tr>
+                </thead>
+       
+                <tbody>
+           
+                  {% for s in sla %}
+                  <tr>
+                    <td>
+                      <!-- <div class="text_ellipsis"> -->
+                      {{forloop.counter}}
+                      <!-- </div> -->
+                    </td>
+              
+                    <td>{{s.voiceopen_status}}</td>
+                    <td>{{s.voiceopen_respond_within|date:"H:i:s"}}</td>
+                    <td>{{s.voiceprogress_status}}</td>
+                    <td>{{s.voiceprogress_respond_within|date:"H:i:s"}}</td>
+                    <td>{{s.emailopen_status}}</td>
+                    <td>{{s.emailopen_respond_within|date:"H:i:s"}}</td>
+                    <td>{{s.emailprogress_status}}</td>
+                    <td>{{s.emailprogress_respond_within}}</td>
+                    <td class="actions">
+                      <a href="{% url 'cases:allslaedit' s.id %}" class="btn btn-success edit" title="Edit" ><i
+                          class="fas fa-pencil-alt"></i></a>
+                      <a href="{% url 'cases:allsladel' s.id %}" class="btn btn-danger remove_case" title="Delete" ><i
+                        class="fas fa-trash-alt"></i></a>
+                    </td>
+                    {% endfor %}
+                    
+                </tbody>
+              </table>
+              {% else %}
+                    <h6 class="text-center">No Records Found</h6>
+
+                    {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js_block %}
+<script type="text/javascript">
+  function close_case(x, url) {
+    var stat = $("#status_id" + x).text()
+    if (stat === "Closed") {
+      alert("Case Already Closed")
+    }
+    else {
+      $.post(url, {
+        "case_id": x
+      }, function (data) {
+        location.reload();
+      })
+    }
+  }
+
+  $(document).ready(function () {
+    $(".filter_toggle").click(function () {
+      $(".list_filter_row").toggle();
+    });
+  });
+  $('#id_account').select2();
+
+
+  search = "{{search}}"
+
+  if (search == 'True') {
+    $(".list_filter_row").show();
+  }
+
+  $('.remove_case').click(function (e) {
+    e.preventDefault()
+    url = $(this).attr('href')
+    if (!confirm('Are you sure you want to delete?'))
+      return;
+    window.location = $(this).attr('href')
+  });
+
+  $("a[rel='page']").click(function (e) {
+    e.preventDefault();
+    $('#cases_filter').attr("action", $(this).attr("href"));
+    $('#cases_filter').submit();
+  });
+
+  var t1 = document.getElementById('time').innerText;
+  console.log("ttttt",t1)
+  var countDownDate = new Date(t1);
+  countDownDate.setMinutes(countDownDate.getMinutes()+10);
+  console.log("countDownDate:",countDownDate)
+// Update the count down every 1 second
+  var x = setInterval(function() {
+
+  // Get todays date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate -now ;
+  console.log("distance:",distance)
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+
+
+  document.getElementById("dd").innerHTML = days
+  document.getElementById("hh").innerHTML = hours
+  document.getElementById("mm").innerHTML = minutes
+  document.getElementById("ss").innerHTML = seconds
+
+  if(minutes == 2){
+    document.getElementById("timer").innerHTML = "ALERT";
+  }
+  // If the count down is finished, write some text 
+  if (distance < 0) {
+    clearInterval(x);
+
+    document.getElementById("timer").innerHTML = "EXPIRED";
+  }
+}, 1000);
+</script>
+{% endblock js_block %}

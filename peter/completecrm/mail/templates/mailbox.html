@@ -1,0 +1,739 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% block breadcrumb %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb pt-2">
+    <li class="breadcrumb-item"><a href="{% url 'opportunities:list' %}">Email</a></li>
+    <li class="breadcrumb-item active">{% if opportunity_obj %}Edit{% else %}Inbox{% endif %}</li>
+  </ol>
+</nav>
+{% endblock %}
+{% block content %}
+
+<head>
+  <link rel="stylesheet" type="text/css"
+    href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/start/jquery-ui.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css" rel="stylesheet">
+  <style>
+  .te{
+    margin: 0 0 12px 0 !important;
+  }
+  .pannel {
+    background: #f1eff1 !important;
+    color: #2a2a2b !important;
+    padding: 0 !important;
+    height: 32px !important;
+    border-color: #ebe9ec !important;
+  }
+
+  .message {
+	 background-color: #FFF;
+	 border: 1px solid #eaeaea;
+	 color: #666;
+	 padding: 6px;
+ }
+
+ .inbx_unread {
+	 background-color: #CCC;
+	 border: 1px solid #CCC;
+	 color: #333;
+	 padding: 6px;
+	 font-weight: bold;
+ }
+
+ /* .inbx_selected {
+	 background-color: rgb(134, 134, 134);
+	 border: 1px solid #333;
+	 color: #fff;
+	 padding: 6px;
+ } */
+
+  </style>
+</head>
+<div class="col-md-12">
+  <div class="kt-grid__item kt-grid__item--fluid kt-app__content"	id="kt_chat_content">
+    <div class="kt-chat">
+      <div class="kt-portlet kt-portlet--head-lg kt-portlet--last">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title" style="color:#5867dd; font-size: 20px;">
+              Email Template
+            </h3>
+
+          </div>
+          <div class="kt-portlet__head-label">
+          
+          </div>
+
+        </div>
+
+        <div class="kt-portlet__body">
+          <!--Begin::Tab Content-->
+          <div class="tab-content">
+            <!--begin::tab 1 content-->
+            <div class="tab-pane active" id="kt_widget11_tab1_content">
+              <!--begin::Widget 11-->
+              <div class="kt-widget11">
+                <div id="kt_table_1_wrapper"
+                  class="dataTables_wrapper dt-bootstrap4 no-footer">
+
+                  <table
+                    class="table table-striped- table-bordered  table-checkable dataTable no-footer dtr-inline"
+                    id="myTable" role="grid"
+                    aria-describedby="kt_table_1_info"
+                    >
+                    <thead>
+                      <tr role="row">
+                        <th class="sorting_desc" tabindex="0"
+                          aria-controls="kt_table_1"
+                          rowspan="1" colspan="1"
+                          style="width: 5%;"
+                          aria-sort="descending"
+                          aria-label="Order ID: activate to sort column ascending">
+                          S.No</th>
+                          <th class="sorting" tabindex="0"
+                          aria-controls="kt_table_1"
+                          rowspan="1" colspan="1"
+                          style="width: 300px;"
+                          aria-label="Country: activate to sort column ascending">
+                          Username</th>
+                        <th class="sorting" tabindex="0"
+                          aria-controls="kt_table_1"
+                          rowspan="1" colspan="1"
+                          style="width: 400px;"
+                          aria-label="Country: activate to sort column ascending">
+                          Subject</th>
+                        <th class="sorting" tabindex="0"
+                          aria-controls="kt_table_1"
+                          rowspan="1" colspan="1"
+                          style="width: 97.25px;"
+                          aria-label="Ship City: activate to sort column ascending">
+                          Description</th>
+                        <!-- <th class="sorting" tabindex="0"
+                          aria-controls="kt_table_1"
+                          rowspan="1" colspan="1"
+                          style="width: 45.25px;"
+                          aria-label="Ship Date: activate to sort column ascending">
+                          Actions
+                        </th> -->
+                        
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {% for subject in ebox %}
+                      {% if request.user.role == "ADMIN"%}
+                      <tr role="row" id="{{subject.read_status}}"  data-toggle="modal" data-target="#exampleModal" class="odd message inbx_unread">
+                        <td>
+                          {{forloop.counter}}
+                          <!-- <label class="kt-checkbox kt-checkbox--single">
+                                  <input type="checkbox"><span></span>
+                                  </label> -->
+                        </td>
+                        <td>
+                          {{subject.username}}
+                        </td>
+                        <td>
+                          {{subject.subject_inbox}}
+                        </td>
+                        <td>{{subject.description|safe}}</td>
+                        <!-- <td class="text-center"><i class="fas fa-pencil-alt"></i></td> -->
+                      
+
+                      </tr>
+                      {% else %}
+                      {% if subject.read_status == 'unread' %}
+                      <tr role="row" id="{{subject.id}}" class="message inbx_unread" >
+                          <td>
+                            {{forloop.counter}}
+                          </td>
+                          <td>
+                           <a href="{% url 'mail:notification' subject.id %}"> {{subject.username}} </a>
+                          </td>
+                          <td>
+                            {{subject.subject_inbox}}
+                          </td>
+                          <td>{{subject.description|safe}}</td>
+                          <!-- <td class="text-center"><i class="fas fa-pencil-alt"></i></td> -->
+                      </tr>
+                      {% else %}
+                      <tr role="row" id="{{subject.id}}" class="message" >
+                        <td>
+                          {{forloop.counter}}
+                        </td>
+                        <td>
+                         <a href="{% url 'mail:notification' subject.id %}"> {{subject.username}} </a>
+                        </td>
+                        <td>
+                          {{subject.subject_inbox}}
+                        </td>
+                        <td>{{subject.description|safe}}</td>
+                        <!-- <td class="text-center"><i class="fas fa-pencil-alt"></i></td> -->
+                    
+
+
+                    </tr>
+                      {% endif %}
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+
+                  </table>
+
+
+                </div>
+                <!-- <div class="kt-widget11__action kt-align-right">
+                  <button type="button" class="btn btn-label-brand btn-bold btn-sm">Refresh</button>
+                </div> -->
+              </div>
+              <!--end::Widget 11-->
+            </div>
+            <!--end::tab 1 content-->
+
+
+            <!--begin::tab 3 content-->
+            <!-- <div class="tab-pane" id="kt_widget11_tab3_content"> -->
+            <!--begin::Widget 11-->
+
+            <!--end::Widget 11-->
+            <!-- </div> -->
+            <!--end::tab 3 content-->
+          </div>
+          <!--End::Tab Content-->
+        </div>
+
+
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+        <!-- <script type="text/javascript">
+          $(document).ready(function () {
+
+            $('#myTable').DataTable({
+
+            });
+
+          });
+
+        </script> -->
+        <script type="text/javascript">
+          window.mytest = function () {
+            var isValid = confirm('Are you sure ?');
+            if (!isValid) {
+              event.preventDefault();
+
+            }
+          }
+          // $(".message").each(function(index) {
+          //     var nope = $(this).attr("id", this.id + index);
+          //     console.log('====', this.id)
+          // });
+        </script>
+
+
+        <!--End:: App Content-->
+
+      </div>
+    </div>  
+  </div>
+</div>
+
+<!-- <div class="mt-5 mb-5"></div> -->
+  <!-- <div class="progress position-relative" style="width:40%;height:1.5rem;">
+    <span class="justify-content-center d-flex position-absolute w-100 percent">0%</span>
+    <div class="progress-bar bar"></div>
+  </div> -->
+<!-- </div> -->
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>This is a test modal</p>
+        <p>Created a new modal</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+{% endblock %}
+{% block js_block %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js'></script>
+<script src="https://malsup.github.io/jquery.form.js"></script>
+<script>
+  // $(document).ready(function () {
+  //   $(".message").click(function(){
+  //     $('#exampleModal').modal('show');
+  //   });
+  // });
+
+  $(".message").on('click',function(){
+        sid = this.id;
+        console.log(sid,"=njuk==")
+        // var respo
+        $.ajax({
+            type:"POST",
+            url:"/subevents/",
+            data:{
+                "cid":sid
+            },
+            dataTyple:"json",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function (data) {
+                $('#subevent').html(data);
+                     }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals.
+		factory(jQuery);
+	}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function decode(s) {
+		if (config.raw) {
+			return s;
+		}
+		return decodeURIComponent(s.replace(pluses, ' '));
+	}
+
+	function decodeAndParse(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		s = decode(s);
+
+		try {
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// Write
+		if (value !== undefined) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setDate(t.getDate() + days);
+			}
+
+			value = config.json ? JSON.stringify(value) : String(value);
+
+			return (document.cookie = [
+				config.raw ? key : encodeURIComponent(key),
+				'=',
+				config.raw ? value : encodeURIComponent(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+		var cookies = document.cookie.split('; ');
+		var result = key ? undefined : {};
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				result = decodeAndParse(cookie);
+				break;
+			}
+
+			if (!key) {
+				result[name] = decodeAndParse(cookie);
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) !== undefined) {
+			// Must not alter options, thus extending a fresh object...
+			$.cookie(key, '', $.extend({}, options, { expires: -1 }));
+			return true;
+		}
+		return false;
+	};
+
+}));
+
+
+$(document).ready(function(){
+
+	$(".message").click(function() {
+		
+		// we get the clicked element ID
+		var id_msg = $(this).attr('id');
+    // console.log(id_msg,"-------------")
+		
+		// we read the cookie, to remove the previous selected class to the last_read element
+		var last_read = $.cookie('last_read');
+		$('#' + last_read).removeClass("inbx_selected");
+
+		// we set the cookie, so we keep can remove the selected class in the next click
+		$.cookie('last_read', id_msg);
+		
+		//
+		// probably, here you should do some AJAX post to update the message status at the database
+		// 
+    $(this).removeClass("inbx_unread").addClass("inbx_selected");
+
+		// we remove the unread class, and add teh selected class
+    // console.log(this.className)
+//     var spans=document.getElementsByClassName('odduser inbx_selected')
+    // if (this.className=="odduser inbx_selected"){
+
+    //   console.log('sucess')
+    // }
+    // else{
+    //   $(this).removeClass("inbx_unread").addClass("inbx_selected");
+    //   console.log('yes')
+
+
+    // }
+	
+
+	});
+  
+
+});
+</script>
+<!-- <script>
+  $(document).ready(function($) {
+    $("tr").click(function() {
+        var abce = window.location = $(this).data("href");
+        console.log(abce)
+    });
+});
+</script> -->
+<!-- <script type="text/javascript">
+  var bar = $('.bar');
+  var percent = $('.percent');
+
+  $('#progress_bar').hide()
+  $('#_id_assigned_to').select2({ disabled: 'readonly' });
+
+  $('form#id_opportunity_form').ajaxForm({
+    type: 'POST',
+    dataType: 'json',
+    url: ".",
+    data: $('#id_opportunity_form').serialize(),
+    beforeSubmit: disableButton,
+    beforeSend: function () {
+      var percentVal = '0%';
+      bar.width(percentVal);
+      percent.html(percentVal);
+    },
+    uploadProgress: function (event, position, total, percentComplete) {
+      var percentVal = percentComplete + '%';
+      bar.width(percentVal);
+      if (percentVal == '100%') {
+        percent.html('Uploading ...')
+      }
+      else {
+        percent.html(percentVal);
+      }
+    },
+    success: function (data) {
+      if (data.error) {
+        $('#progress_bar').hide()
+        $('.error_message').html('')
+        for (var key in data.errors) {
+          $('#error_id_' + key).html("<p>" + data.errors[key][0] + "</p>");
+        };
+        $('#submit_btn').removeAttr('disabled')
+      }
+      else {
+        window.location = data.success_url;
+      }
+    }
+  });
+
+  $('#submit_btn').click(function () {
+    var file = $('#oppurtunity_attachment')[0].files[0];
+    if (file && file.name.length > 0) {
+      var percentVal = '0%';
+      bar.width(percentVal);
+      percent.html(percentVal);
+      $('#progress_bar').show()
+    }
+
+  });
+
+  function disableButton() {
+    // $('#progress_bar').show()
+    $('#submit_btn').attr('disabled', 'disabled')
+  }
+
+  $(function () {
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    $('#id_closed_on').datetimepicker({
+      'format': 'DD-MM-YYYY',
+      minDate: today
+    })
+  });
+
+  $(".savenew").on('click', function (e) {
+    e.preventDefault()
+    $("#save_new_form").val('true')
+    $('#id_opportunity_form').submit()
+  });
+  $(document).ready(function () {
+    $('.assigned_users').select2();
+    $("#id_contacts").select2();
+    $('#id_currency').select2();
+    $('#id_teams').select2();
+  });
+
+  $('#id_account').change(function () {
+    var Account = $("#id_account").val()
+    $.get("{% url 'opportunities:contacts' %}", { "Account": Account }, function (data) {
+      $("#id_contacts").html("")
+      $.each(data, function (index, value) {
+        $("#id_contacts").append("<option value=" + index + ">" + value + "</option>")
+      });
+    })
+  });
+
+  $("#comment_form").submit(function (e) {
+    e.preventDefault()
+    var formData = new FormData($("#comment_form")[0]);
+    $.ajax({
+      url: "{% url 'opportunities:add_comment' %}",
+      type: "POST",
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (data) {
+        if (data.error) {
+          $("#CommentError").html(data.error).show()
+        }
+        else {
+          $("#comments_div").prepend("<li class='list-group-item list-row' id='comment" + data.com_id + "'>" +
+            "<div class='pull-right right-container'>" +
+            "<div class='list-row-buttons btn-group pull-right'>" +
+            "<button class='btn btn-link btn-sm dropdown-toggle' data-toggle='dropdown' type='button'><span class='caret'></span></button>" +
+            "<ul class='dropdown-menu pull-right'>" +
+            "<li><a class='action' onclick='edit_comment(" + data.com_id + ")'>Edit</a></li>" +
+            "<li><a class='action' onclick='remove_comment(" + data.com_id + ")''>Remove</a></li></ul></div></div>" +
+            "<div class='stream-head-container'> " + data.com_user + " Commented</div>" +
+            "<div class='stream-post-container' id='comment_name" + data.com_id + "'>" + data.comment + "</div>" +
+            "<div class='stream-date-container" + data.com_id + "'>" + data.comment_time + "</div></div><div class='stream-date-container' id='comment_file_div" + data.com_id + "'><div id='new_comment" + data.com_id + "'</div></div></li>"
+          )
+          $("#id_comments").val("")
+          alert("Comment Submitted")
+        }
+      }
+    });
+  });
+
+
+  function edit_comment(x) {
+    $('#myModal_comment').modal('show');
+    comment = $("#comment_name" + x).text()
+    $("#commentid").val(x)
+    $("#id_editcomment").val(comment)
+  }
+
+  $("#comment_edit").click(function (e) {
+    alert("Heyyyyyyyyyyy")
+    e.preventDefault()
+    var formData = new FormData($("#comment_edit_form")[0]);
+    $.ajax({
+      url: "{% url 'opportunities:edit_comment' %}",
+      type: "POST",
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (data) {
+        if (data.error) {
+          alert(data.error)
+        } else {
+          $("#comment_name" + data.commentid).text(data.comment)
+          $('#myModal_comment').modal('hide');
+          $("#id_editcomment").val("")
+        }
+      }
+    })
+  });
+
+  function remove_comment(x) {
+    var warn = confirm("Are You Sure, you Want to Delete this Comment!?")
+    if (warn == true) {
+      $.post('{% url "opportunities:remove_comment" %}', { "comment_id": x }, function (data) {
+        if (data.error) {
+          alert(data.error)
+        } else {
+          $("#comment" + data.oid).remove()
+        }
+      })
+    }
+  }
+
+  function editFun(x) {
+    $.ajax({
+      type: "POST",
+      url: "/opportunities/editdetails/",
+      data: { tid: x },
+      success: function (data) {
+        $("#viewdiv").hide()
+        $("#editdiv").show()
+        $("#id_name").val(data.name)
+        $("#id_stage").val(data.stage)
+        $("#id_amount").val(data.amount)
+        $("#id_account").val(data.account)
+        $("#id_probability").val(data.probability)
+        $("#id_close_date").val(data.close_date)
+        $("#hiddenval").val(data.eid)
+        $("#id_lead_source").val(data.sources)
+        $("#id_description").val(data.description)
+        contacts = data.contacts.replace("b'", "")
+        contacts = contacts.replace(/\\n/g, '')
+        contacts = contacts.replace(/\\t/g, '')
+        contacts = contacts.replace(/'/g, '')
+        contacts = contacts.replace(/}/g, '')
+        $("#id_contacts").html(contacts)
+      }
+    })
+
+
+    $('#id_account').change(function () {
+      var Account = $("#id_account").val()
+      $.get("{% url 'opportunities:contacts' %}", {
+        "Account": Account
+      }, function (data) {
+        $("#id_contacts").html("")
+        $.each(data, function (index, value) {
+          // console.log(index, value)
+          $("#id_contacts").append("<option value=" + index + ">" + value + "</option>")
+        });
+      })
+    });
+
+  }
+  function onAddTag(tag) {
+    alert("Added a tag: " + tag);
+  }
+  function onRemoveTag(tag) {
+    alert("Removed a tag: " + tag);
+  }
+
+  function onChangeTag(input, tag) {
+    alert("Changed a tag: " + tag);
+  }
+
+  $(function () {
+
+    $('#tags_1').tagsInput({ width: 'auto' });
+    $('#tags_2').tagsInput({
+      width: 'auto',
+      onChange: function (elem, elem_tags) {
+        var languages = ['php', 'ruby', 'javascript'];
+        $('.tag', elem_tags).each(function () {
+          if ($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+            $(this).css('background-color', 'yellow');
+        });
+      }
+    });
+    $('#tags_3').tagsInput({
+      width: 'auto',
+
+      //autocomplete_url:'test/fake_plaintext_endpoint.html' //jquery.autocomplete (not jquery ui)
+      autocomplete_url: 'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+    });
+
+
+    // Uncomment this line to see the callback functions in action
+    //      $('input.tags').tagsInput({onAddTag:onAddTag,onRemoveTag:onRemoveTag,onChange: onChangeTag});   
+
+    // Uncomment this line to see an input with no interface for adding new tags.
+    //      $('input.tags').tagsInput({interactive:false});
+  });
+
+  function remove_attachment(x) {
+    const con = confirm("Do you want to Delete it for Sure!?");
+    if (con == true) {
+      $.post('{% url "cases:remove_attachment" %}', {
+        "attachment_id": x
+      }, function (data) {
+        if (data.error) {
+          alert(data.errors)
+        } else {
+          $("#attachment" + data.attachment_object).remove()
+        }
+      })
+    }
+  }
+
+  $("#id_teams").change(function (e) {
+    try {
+      var users = []
+      $('#id_teams option:selected').each(function () {
+        // users.push($(this).attr('data-users'))
+        _data = $(this).attr('data-users');
+        if (!users) {
+          // users = []
+        } else {
+          users = users.concat(_data.split(','))
+        }
+      })
+      // users = $('option:selected', this).attr('data-users')
+      // if (!users) {
+      //   users = []
+      // } else {
+      //   users = users.split(',')
+      // }
+      console.log('selected users teams data', users)
+      var existingUsers = $('#id_assigned_to').val();
+      var allUsers = users.concat(existingUsers)
+      console.log(existingUsers)
+      if (users.length) {
+        $('#_id_assigned_to').select2().val(allUsers).trigger('change');
+
+      }
+    } catch (error) {
+      console.log(error)
+      $('#_id_assigned_to').select2().val(existingUsers).trigger('change');
+    }
+
+  });
+
+
+
+</script> -->
+{% endblock js_block %}

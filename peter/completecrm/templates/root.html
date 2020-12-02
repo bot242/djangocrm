@@ -1,0 +1,2087 @@
+{% load staticfiles %}
+{% load compress %}
+{% load thumbnail %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuarcpro </title>
+  <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="icon" type="image/png"  href="/static/images/a.ico" />
+  <!-- <link rel="stylesheet" href="/static/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/css/fontastic.css">
+
+  <!-- <link rel="stylesheet" href="/static/css/custom.css"> -->
+  <!-- <link rel="stylesheet" href="/static/css/style.default.css"> -->
+
+  <link rel="stylesheet" href="/static/css/sample.css">
+
+  {% block date_picker %}
+  <!-- <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" /> -->
+  <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css"></link>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  {% endblock date_picker %}
+
+  {% block quill_editor_links %}
+  <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet"> -->
+
+  <link href="/static/css/quill.snow.css" rel="stylesheet">
+  <link href="/static/css/quill.bubble.css" rel="stylesheet">
+  <link href="/static/css/quill.core.css" rel="stylesheet">
+  {% endblock quill_editor_links %}
+
+
+  <!-- <link href="http://zoogletech.com/crmscss/main.css" rel="stylesheet">
+  <link href="http://zoogletech.com/crmscss/mention.css" rel="stylesheet"> -->
+
+  <link href="/static/css/main1.css" rel="stylesheet">
+  <link href="/static/css/mention1.css" rel="stylesheet">
+ 
+  <script src="{% static 'channels/js/websocketbridge.js' %}" type="text/javascript"></script>
+  <style>
+
+.bg-white {
+    background: #fff !important;
+}
+.card-body {
+  padding:0;
+  margin:0
+}
+.select2-container--default .select2-results__option[aria-disabled=true] {
+  display: none;
+}
+/* .closeform {
+  float:right;
+  cursor: default;
+  color: black;
+  font-size:25px;
+  border: none;
+  background-color: transparent;
+} */
+.megamenu-li {
+	position: static;
+}
+/* header .navbar .navbar-nav li .dropdown-menu {
+    padding: 0;
+    background-color: rgb(192, 177, 177);
+} */
+header .navbar .navbar-brand {
+  color: #FFF;
+  font-weight: 600;
+  margin-right: 50px;
+}
+
+.megamenu {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  
+}
+
+header .navbar .navbar-nav li .dropdown-menu a {
+  color: black !important;
+}
+header .navbar .navbar-nav li .dropdown-menu a:hover {
+  color: #FFF !important;
+  background-color: rgb(5, 12, 92) !important;
+  font-weight: 600;
+}
+header .navbar .navbar-nav li .dropdown-menu h4 {
+  color: rgba(49, 48, 48, 0.788) !important;
+}
+.colors {
+  background: #fff;
+  border-radius: 0;
+  padding: 20px;
+  border: none;
+  min-height: 100px;
+  background-color:#53c583;  
+  /* box-shadow: 0px 23px rgb(230, 241, 241); */
+  /* box-shadow: 5px 5px 10px cadetblue; */
+  box-shadow: 0 20px 6px -6px rgb(220, 226, 226);
+
+  
+}
+/* .colors:hover {
+  box-shadow: 0px 23px rgb(230, 241, 241);
+} */
+
+.title1 {
+  line-height: 5.00rem;
+  font-weight: 600;
+  font-size: 1.40rem;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+}
+.title2 {
+  line-height: 5.00rem;
+  font-weight: 600;
+  font-size: 1.20rem;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+
+.icons {
+  font-size: 60px;
+  color: #FFF;
+  margin-left: 30px;
+  line-height: 52px;
+  min-height: 90px;
+  float: left;
+  width: 2.25em;
+}
+.colors1 {
+  background: #fff;
+  border-radius: 0;
+  padding: 20px;
+  border: none;
+  min-height: 100px;
+  background-color:#e9635a;
+  box-shadow: 0 20px 6px -6px rgb(220, 226, 226);
+}
+.colors2 {
+  background: #fff;
+  border-radius: 0;
+  padding: 20px;
+  border: none;
+  min-height: 100px;
+  background-color:#aa44be;
+  box-shadow: 0 20px 6px -6px rgb(220, 226, 226);
+}
+
+.icon1 {
+  font-size: 60px;
+  color: #FFF;
+  margin-left: 10px;
+  /* margin-right: 12px; */
+  line-height: 52px;
+  min-height: 90px;
+  float: left;
+  width: 2.25em;
+}
+header .navbar .navbar-nav li .dropdown-menu a svg {
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 1.00rem;
+}
+header .navbar .navbar-nav li .dropdown-menu a { 
+  font-size: 1.00rem;
+}
+.navbar .dropdown:hover .dropdown-menu, .navbar .dropdown .dropdown-menu:hover {
+  display:block!important;
+}
+.navbar-nav>li>.dropdown-menu {
+    /* margin-top: 20px; */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.tom {
+  padding:6px; 
+  text-align:center; 
+  background-color:#53c583 !important; 
+  color:white;
+}
+.tom1 {
+  padding:6px; 
+  text-align:center; 
+  background-color:#ff7676 !important; 
+  color:white;
+}
+.tom2 {
+  padding:6px; 
+  text-align:center; 
+  background-color:#aa44be !important; 
+  color:white;
+}
+/* .zoom:hover {
+  -ms-transform: scale(1.0);
+  -webkit-transform: scale(1.0);
+  transform: scale(1.1); 
+} */
+.font {
+  font-size:19px;
+}
+/* Create the blue navigation bar */
+.navbar1 {
+  background-color: #3b5998;
+  font-size: 27px;
+  padding: 5px 10px;
+  margin-left: 10px;
+
+}
+
+/* Define what each icon button should look like */
+.button {
+  color: white;
+  display: inline-block; /* Inline elements with width and height. TL;DR they make the icon buttons stack from left-to-right instead of top-to-bottom */
+  position: relative; /* All 'absolute'ly positioned elements are relative to this one */
+  padding: 2px 5px; /* Add some padding so it looks nice */
+}
+
+/* Make the badge float in the top right corner of the button */
+.button__badge {
+  background-color: #000;
+  border-radius: 2px;
+  color: white;
+ 
+  padding: 1px 3px;
+  font-size: 14px;
+  
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 0;
+  right: 0;
+}
+
+
+  </style>
+  {% block extralinks %} {% endblock %}
+</head>
+
+<body class="main_body_bg_color">
+  <div class="wrapper">
+    {% block header %}
+    <header>
+      <nav class="navbar navbar-default navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="{% url 'common:dashboard' %}">
+          <!-- Nuarcpro -->
+          <img style="width: 180px; color:#fff" src="/static/images/companylogo.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse"  id="navbar">
+          {% if request.user.is_superuser or request.user.role == "ADMIN" or request.user.role == "USER"  and request.user.has_sales_access and request.user.has_marketing_access and request.user.has_service_access %}
+          <ul class="navbar-nav mr-auto" id="lest">
+            <li class="nav-item dropdown megamenu-li" id="test">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Service</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                  <a class="dropdown-item" href="{% url 'common:casedashboard' %}"><i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                  <a class="dropdown-item" id="contact_id" href="{% url 'contacts:list' %}"> <i class="ml-2 fa fa-user-circle"></i>Contacts</a>
+                  <a class="dropdown-item" id="cases_id" href="{% url 'cases:list' %}"><i class="ml-2 fas fa-briefcase "></i>Cases</a>
+                  {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+                  <a class="dropdown-item" id="sla_id" href="{% url 'cases:allslalist' %}"><i class="ml-2 fas fa-users-cog"></i>SL Settings</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+               
+            </li>    
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Sales</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                  <a class="dropdown-item" href="{% url 'common:home' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+
+                    Dashboard
+                  </a>
+                  <a class="dropdown-item" id="lead_id" href="{% url 'leads:list' %}">                  
+                    <i class="fas fa-address-book ml-2"></i>
+                    Leads
+                  </a> 
+                  <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                    
+                    <i class="fa fa-user-circle ml-2"></i> Contacts
+                  </a>                 
+                  <a class="dropdown-item" id="account_id" href="{% url 'accounts:list' %}">                  
+                    
+                   <i class="fa fa-user ml-2" aria-hidden="true"></i> Accounts
+                  </a>
+                  <a class="dropdown-item" id="opportunities_id" href="{% url 'opportunities:list' %}">                  
+                    <i class="ml-2 fas fa-funnel-dollar"></i>
+                    Opportunities
+                  </a>  
+                </div>
+              </div>
+               
+            </li>    
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Marketing</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                  <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard
+                  </a>   
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>            
+                  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Target List</a>
+
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Templates
+                  </a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'leads:list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Leads
+                  </a>  
+                  
+                   
+                </div>
+              </div>
+               
+            </li> 
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>E-mail</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'mail:dashboard' %}">                  
+                    <i class="fa fa-envelope"></i>
+                    Inbox
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>  
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Teams</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'teams:teams_list' %}">                  
+                    <i class="fas fa-users"></i>
+                    Teams
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>                   
+          </ul>
+          {% endif %}
+          {% if  request.user.has_sales_access and request.user.has_marketing_access and not request.user.has_service_access %}
+          <ul class="navbar-nav mr-auto" id="lest">
+            <!-- <li class="nav-item dropdown megamenu-li" id="test">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Service</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                  <a class="dropdown-item" href="{% url 'common:casedashboard' %}"><i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                  <a class="dropdown-item" id="contact_id" href="{% url 'contacts:list' %}"> <i class="ml-2 fa fa-user-circle"></i>Contacts</a>
+                  <a class="dropdown-item" id="cases_id" href="{% url 'cases:list' %}"><i class="ml-2 fas fa-briefcase "></i>Cases</a>
+                  {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+                  <a class="dropdown-item" id="sla_id" href="{% url 'cases:allslalist' %}"><i class="ml-2 fas fa-users-cog"></i>SL Settings</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+               
+            </li>     -->
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Sales</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                  <a class="dropdown-item" href="{% url 'common:home' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+
+                    Dashboard
+                  </a>
+                  <a class="dropdown-item" id="lead_id" href="{% url 'leads:list' %}">                  
+                    <i class="fas fa-address-book ml-2"></i>
+                    Leads
+                  </a> 
+                  <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                    
+                    <i class="fa fa-user-circle ml-2"></i> Contacts
+                  </a>                 
+                  <a class="dropdown-item" id="account_id" href="{% url 'accounts:list' %}">                  
+                    
+                   <i class="fa fa-user ml-2" aria-hidden="true"></i> Accounts
+                  </a>
+                  <a class="dropdown-item" id="opportunities_id" href="{% url 'opportunities:list' %}">                  
+                    <i class="ml-2 fas fa-funnel-dollar"></i>
+                    Opportunities
+                  </a>  
+                </div>
+              </div>
+               
+            </li>    
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Marketing</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                  <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard
+                  </a>   
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>            
+                  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Target List</a>
+
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Templates
+                  </a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'leads:list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Leads
+                  </a>  
+                  
+                   
+                </div>
+              </div>
+               
+            </li> 
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>E-mail</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'mail:dashboard' %}">                  
+                    <i class="fa fa-envelope"></i>
+                    Inbox
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>  
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Teams</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'teams:teams_list' %}">                  
+                    <i class="fas fa-users"></i>
+                    Teams
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>                   
+          </ul>
+          {% endif %}
+          {% if request.user.has_sales_access and request.user.has_service_access and not request.user.has_marketing_access  %}
+          <ul class="navbar-nav mr-auto" id="lest">
+            <li class="nav-item dropdown megamenu-li" id="test">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Service</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                  <a class="dropdown-item" href="{% url 'common:casedashboard' %}"><i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                  <a class="dropdown-item" id="contact_id" href="{% url 'contacts:list' %}"> <i class="ml-2 fa fa-user-circle"></i>Contacts</a>
+                  <a class="dropdown-item" id="cases_id" href="{% url 'cases:list' %}"><i class="ml-2 fas fa-briefcase "></i>Cases</a>
+                  {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+                  <a class="dropdown-item" id="sla_id" href="{% url 'cases:allslalist' %}"><i class="ml-2 fas fa-users-cog"></i>SL Settings</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+               
+            </li>    
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Sales</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                  <a class="dropdown-item" href="{% url 'common:home' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+
+                    Dashboard
+                  </a>
+                  <a class="dropdown-item" id="lead_id" href="{% url 'leads:list' %}">                  
+                    <i class="fas fa-address-book ml-2"></i>
+                    Leads
+                  </a> 
+                  <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                    
+                    <i class="fa fa-user-circle ml-2"></i> Contacts
+                  </a>                 
+                  <a class="dropdown-item" id="account_id" href="{% url 'accounts:list' %}">                  
+                    
+                   <i class="fa fa-user ml-2" aria-hidden="true"></i> Accounts
+                  </a>
+                  <a class="dropdown-item" id="opportunities_id" href="{% url 'opportunities:list' %}">                  
+                    <i class="ml-2 fas fa-funnel-dollar"></i>
+                    Opportunities
+                  </a>  
+                </div>
+              </div>
+               
+            </li>    
+            <!-- <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Marketing</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                  <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard
+                  </a>   
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>            
+                  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Target List</a>
+
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Templates
+                  </a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'leads:list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Leads
+                  </a>  
+                  
+                   
+                </div>
+              </div>
+               
+            </li>  -->
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>E-mail</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'mail:dashboard' %}">                  
+                    <i class="fa fa-envelope"></i>
+                    Inbox
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>  
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Teams</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'teams:teams_list' %}">                  
+                    <i class="fas fa-users"></i>
+                    Teams
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>                   
+          </ul>
+          {% endif %}
+          {% if request.user.has_marketing_access and request.user.has_service_access and not request.user.has_sales_access  %}
+          <ul class="navbar-nav mr-auto" id="lest">
+            <li class="nav-item dropdown megamenu-li" id="test">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Service</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                  <a class="dropdown-item" href="{% url 'common:casedashboard' %}"><i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                  <a class="dropdown-item" id="contact_id" href="{% url 'contacts:list' %}"> <i class="ml-2 fa fa-user-circle"></i>Contacts</a>
+                  <a class="dropdown-item" id="cases_id" href="{% url 'cases:list' %}"><i class="ml-2 fas fa-briefcase "></i>Cases</a>
+                  {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+                  <a class="dropdown-item" id="sla_id" href="{% url 'cases:allslalist' %}"><i class="ml-2 fas fa-users-cog"></i>SL Settings</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+               
+            </li>    
+            <!-- <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Sales</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                  <a class="dropdown-item" href="{% url 'common:home' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+
+                    Dashboard
+                  </a>
+                  <a class="dropdown-item" id="lead_id" href="{% url 'leads:list' %}">                  
+                    <i class="fas fa-address-book ml-2"></i>
+                    Leads
+                  </a> 
+                  <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                    
+                    <i class="fa fa-user-circle ml-2"></i> Contacts
+                  </a>                 
+                  <a class="dropdown-item" id="account_id" href="{% url 'accounts:list' %}">                  
+                    
+                   <i class="fa fa-user ml-2" aria-hidden="true"></i> Accounts
+                  </a>
+                  <a class="dropdown-item" id="opportunities_id" href="{% url 'opportunities:list' %}">                  
+                    <i class="ml-2 fas fa-funnel-dollar"></i>
+                    Opportunities
+                  </a>  
+                </div>
+              </div>
+               
+            </li>     -->
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Marketing</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                  <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard
+                  </a>   
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>            
+                  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Target List</a>
+
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Templates
+                  </a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'leads:list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Leads
+                  </a>  
+                  
+                   
+                </div>
+              </div>
+               
+            </li> 
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>E-mail</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'mail:dashboard' %}">                  
+                    <i class="fa fa-envelope"></i>
+                    Inbox
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>  
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Teams</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'teams:teams_list' %}">                  
+                    <i class="fas fa-users"></i>
+                    Teams
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>                   
+          </ul>
+          {% endif %}
+          {% if request.user.has_service_access and not request.user.has_sales_access and not request.user.has_marketing_access  %}
+          <ul class="navbar-nav mr-auto" id="lest">
+            <li class="nav-item dropdown megamenu-li" id="test">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Service</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                  <a class="dropdown-item" href="{% url 'common:casedashboard' %}"><i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                  <a class="dropdown-item" id="contact_id" href="{% url 'contacts:list' %}"> <i class="ml-2 fa fa-user-circle"></i>Contacts</a>
+                  <a class="dropdown-item" id="cases_id" href="{% url 'cases:list' %}"><i class="ml-2 fas fa-briefcase "></i>Cases</a>
+                  {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+                  <a class="dropdown-item" id="sla_id" href="{% url 'cases:allslalist' %}"><i class="ml-2 fas fa-users-cog"></i>SL Settings</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+               
+            </li>    
+            <!-- <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Sales</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                  <a class="dropdown-item" href="{% url 'common:home' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+
+                    Dashboard
+                  </a>
+                  <a class="dropdown-item" id="lead_id" href="{% url 'leads:list' %}">                  
+                    <i class="fas fa-address-book ml-2"></i>
+                    Leads
+                  </a> 
+                  <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                    
+                    <i class="fa fa-user-circle ml-2"></i> Contacts
+                  </a>                 
+                  <a class="dropdown-item" id="account_id" href="{% url 'accounts:list' %}">                  
+                    
+                   <i class="fa fa-user ml-2" aria-hidden="true"></i> Accounts
+                  </a>
+                  <a class="dropdown-item" id="opportunities_id" href="{% url 'opportunities:list' %}">                  
+                    <i class="ml-2 fas fa-funnel-dollar"></i>
+                    Opportunities
+                  </a>  
+                </div>
+              </div>
+               
+            </li>     -->
+            <!-- <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Marketing</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                  <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard
+                  </a>   
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>            
+                  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Target List</a>
+
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Templates
+                  </a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'leads:list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Leads
+                  </a>  
+                  
+                   
+                </div>
+              </div>
+               
+            </li>  -->
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>E-mail</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'mail:dashboard' %}">                  
+                    <i class="fa fa-envelope"></i>
+                    Inbox
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>  
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Teams</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'teams:teams_list' %}">                  
+                    <i class="fas fa-users"></i>
+                    Teams
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>                   
+          </ul>
+          {% endif %}
+          {% if request.user.has_sales_access and not request.user.has_service_access and not request.user.has_marketing_access  %}
+          <ul class="navbar-nav mr-auto" id="lest">
+            <!-- <li class="nav-item dropdown megamenu-li" id="test">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Service</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                  <a class="dropdown-item" href="{% url 'common:casedashboard' %}"><i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                  <a class="dropdown-item" id="contact_id" href="{% url 'contacts:list' %}"> <i class="ml-2 fa fa-user-circle"></i>Contacts</a>
+                  <a class="dropdown-item" id="cases_id" href="{% url 'cases:list' %}"><i class="ml-2 fas fa-briefcase "></i>Cases</a>
+                  {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+                  <a class="dropdown-item" id="sla_id" href="{% url 'cases:allslalist' %}"><i class="ml-2 fas fa-users-cog"></i>SL Settings</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+               
+            </li>     -->
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Sales</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                  <a class="dropdown-item" href="{% url 'common:home' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+
+                    Dashboard
+                  </a>
+                  <a class="dropdown-item" id="lead_id" href="{% url 'leads:list' %}">                  
+                    <i class="fas fa-address-book ml-2"></i>
+                    Leads
+                  </a> 
+                  <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                    
+                    <i class="fa fa-user-circle ml-2"></i> Contacts
+                  </a>                 
+                  <a class="dropdown-item" id="account_id" href="{% url 'accounts:list' %}">                  
+                    
+                   <i class="fa fa-user ml-2" aria-hidden="true"></i> Accounts
+                  </a>
+                  <a class="dropdown-item" id="opportunities_id" href="{% url 'opportunities:list' %}">                  
+                    <i class="ml-2 fas fa-funnel-dollar"></i>
+                    Opportunities
+                  </a>  
+                </div>
+              </div>
+               
+            </li>    
+            <!-- <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Marketing</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                  <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard
+                  </a>   
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>            
+                  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Target List</a>
+
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Templates
+                  </a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'leads:list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Leads
+                  </a>  
+                  
+                   
+                </div>
+              </div>
+               
+            </li>  -->
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>E-mail</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'mail:dashboard' %}">                  
+                    <i class="fa fa-envelope"></i>
+                    Inbox
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>  
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Teams</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'teams:teams_list' %}">                  
+                    <i class="fas fa-users"></i>
+                    Teams
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>                   
+          </ul>
+          {% endif %}
+          {% if request.user.has_marketing_access and not request.user.has_sales_access and not request.user.has_service_access  %}
+          <ul class="navbar-nav mr-auto" id="lest">
+            <!-- <li class="nav-item dropdown megamenu-li" id="test">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Service</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                  <a class="dropdown-item" href="{% url 'common:casedashboard' %}"><i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                  <a class="dropdown-item" id="contact_id" href="{% url 'contacts:list' %}"> <i class="ml-2 fa fa-user-circle"></i>Contacts</a>
+                  <a class="dropdown-item" id="cases_id" href="{% url 'cases:list' %}"><i class="ml-2 fas fa-briefcase "></i>Cases</a>
+                  {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+                  <a class="dropdown-item" id="sla_id" href="{% url 'cases:allslalist' %}"><i class="ml-2 fas fa-users-cog"></i>SL Settings</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+               
+            </li>     -->
+            <!-- <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Sales</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" >
+                  <a class="dropdown-item" href="{% url 'common:home' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+
+                    Dashboard
+                  </a>
+                  <a class="dropdown-item" id="lead_id" href="{% url 'leads:list' %}">                  
+                    <i class="fas fa-address-book ml-2"></i>
+                    Leads
+                  </a> 
+                  <a class="dropdown-item" href="{% url 'contacts:list' %}"> 
+                    
+                    <i class="fa fa-user-circle ml-2"></i> Contacts
+                  </a>                 
+                  <a class="dropdown-item" id="account_id" href="{% url 'accounts:list' %}">                  
+                    
+                   <i class="fa fa-user ml-2" aria-hidden="true"></i> Accounts
+                  </a>
+                  <a class="dropdown-item" id="opportunities_id" href="{% url 'opportunities:list' %}">                  
+                    <i class="ml-2 fas fa-funnel-dollar"></i>
+                    Opportunities
+                  </a>  
+                </div>
+              </div>
+               
+            </li>     -->
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Marketing</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                  <a class="dropdown-item" href="{% url 'marketing:dashboard' %}">                  
+                    <i class="ml-2 fas fa-tachometer-alt"></i>
+                    Dashboard
+                  </a>   
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>            
+                  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Target List</a>
+
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Templates
+                  </a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'leads:list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Leads
+                  </a>  
+                  
+                   
+                </div>
+              </div>
+               
+            </li> 
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>E-mail</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'mail:dashboard' %}">                  
+                    <i class="fa fa-envelope"></i>
+                    Inbox
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>  
+            <li class="nav-item dropdown megamenu-li">
+
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <b>Teams</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu3" >
+                   <a class="dropdown-item" href="{% url 'teams:teams_list' %}">                  
+                    <i class="fas fa-users"></i>
+                    Teams
+                  </a>           
+                <!--  <a class="dropdown-item " id="contact-lists" href="{% url 'marketing:contact_lists' %}">
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts List</a>
+
+                  <a class="dropdown-item" id="contacts_list" href="{% url 'marketing:contacts_list' %}">                  
+                    <i class="ml-2 fa fa-user-circle"></i>
+                    Contacts
+                  </a>  
+                  <a class="dropdown-item" id="email_template" href="{% url 'marketing:email_template_list' %}">                
+                    <i class="ml-2 fas fa-envelope-open-text"></i>
+                    Email templates
+                  </a>
+                  <a class="dropdown-item" id="campaign_list" href="{% url 'marketing:campaign_list' %}">                
+                    <i class="ml-2 fas fa-bullhorn"></i>
+                    
+                    Campaigns
+                  </a>      -->
+                </div>
+              </div>
+               
+            </li>                   
+          </ul>
+          {% endif %}
+          <ul class="navbar-nav navbar-right my-2 my-lg-0" id="notifylist" >
+            <li class="nav-item avatar dropdown">
+              <a class="nav-link dropdown-toggle waves-effect waves-light" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="badge badge-danger ml-2" id="mainnoti"></span>
+                <i class="fas fa-bell"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5" id="dropnoti" style="
+              top: 50px !important;
+              right: 0px !important;
+              left: unset !important;
+              width: 270px !important;
+              box-shadow: 0px 5px 7px -1px #c1c1c1 !important;
+              padding-bottom: 0px !important;
+              padding: 0px !important;
+          ">
+                <a class="dropdown-item waves-effect waves-light" href="{% url 'cases:list' %}" onclick="myFunction()">Case Assigned <span class="badge badge-danger ml-2" id="badge1"></span></a>
+                <a class="dropdown-item waves-effect waves-light" href="{% url 'leads:list' %}" onclick="myFunction1()">Lead Assigned <span class="badge badge-danger ml-2" id="badge2"></span></a>
+
+              </div>
+            </li>
+            <li class="nav-item avatar dropdown" >
+              <a href="#" class="dropdown-toggle abcd nav-link float-right" data-toggle="dropdown" role="button"
+                aria-haspopup="true" aria-expanded="false">
+                {% if not request.user.profile_pic %}
+                <img src="{% static 'images/user.png' %}" alt="Micro profile pic">
+                {% else %}
+                {% thumbnail request.user.profile_pic "25x25" as im %}
+                <img src="{{ im.url }}">
+                {% endthumbnail %}
+                {% endif %}
+                <b class="caret"></b>
+              </a>
+              <!-- <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> -->
+                <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdown" style="
+                top: 50px !important;
+                right: 0px !important;
+                left: unset !important;
+                width: 270px !important;
+                box-shadow: 0px 5px 7px -1px #c1c1c1 !important;
+                padding-bottom: 0px !important;
+                padding: 0px !important;
+            ">
+                {% if request.user.role == "ADMIN"  or request.user.is_superuser %}
+                <a class="dropdown-item" href="{% url 'common:users_list' %}">Users</a>
+                <a class="dropdown-item" href="{% url 'common:api_settings' %}">Settings</a>
+                {% endif %}
+                {% if request.user.email != "admin@micropyramid.com" %}
+                <a class="dropdown-item" href="/change-password/">Change Password</a>
+                {% endif %}
+                <a class="dropdown-item" href="{% url 'common:profile' %}">Profile</a>
+                <a class="dropdown-item" href="{% url 'common:logout' %}">Logout</a>
+              </div>
+            </li>
+            
+            <!-- <li class="nav-item dropdown">
+              <div class="navbar1" onclick="myFunction()">
+                <div class="button">
+                  <i class="fa fa-bell"></i>
+                  <span class="button__badge" id="badge"></span>
+                </div>                  
+              </div>
+          </li> -->
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-bell"></i>
+            </a>
+              <ul class="dropdown-menu" style="
+              top: 60px !important;
+              right: 0px !important;
+              left: unset !important;
+              width: 460px !important;
+              box-shadow: 0px 5px 7px -1px #c1c1c1 !important;
+              padding-bottom: 0px !important;
+              padding: 0px !important;
+          ">
+                <li class="head text-light bg-dark">
+                  <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-12">
+                      <span>Notifications (3)</span>
+                      <a href="" class="float-right text-light">Mark all as read</a>
+                    </div>
+                </li>
+                <li class="notification-box">
+                  <div class="row">
+                    <div class="col-lg-3 col-sm-3 col-3 text-center">
+                      <img src="/demo/man-profile.jpg" class="w-50 rounded-circle">
+                    </div>    
+                    <div class="col-lg-8 col-sm-8 col-8">
+                      <strong class="text-info">Case Notification</strong>
+                      <div>
+                        You Have new case
+                      </div>
+                      <small class="text-warning">27.11.2015, 15:00</small>
+                    </div>    
+                  </div>
+                </li>
+                <li class="notification-box bg-gray">
+                  <div class="row">
+                    <div class="col-lg-3 col-sm-3 col-3 text-center">
+                      <img src="/demo/man-profile.jpg" class="w-50 rounded-circle">
+                    </div>    
+                    <div class="col-lg-8 col-sm-8 col-8">
+                      <strong class="text-info">David John</strong>
+                      <div>
+                        Lorem ipsum dolor sit amet, consectetur
+                      </div>
+                      <small class="text-warning">27.11.2015, 15:00</small>
+                    </div>    
+                  </div>
+                </li>
+                <li class="notification-box">
+                  <div class="row">
+                    <div class="col-lg-3 col-sm-3 col-3 text-center">
+                      <img src="/demo/man-profile.jpg" class="w-50 rounded-circle">
+                    </div>    
+                    <div class="col-lg-8 col-sm-8 col-8">
+                      <strong class="text-info">David John</strong>
+                      <div>
+                        Lorem ipsum dolor sit amet, consectetur
+                      </div>
+                      <small class="text-warning">27.11.2015, 15:00</small>
+                    </div>    
+                  </div>
+                </li>
+                <li class="footer bg-dark text-center">
+                  <a href="" class="text-light">View All</a>
+                </li>
+              </ul>
+          </li> -->
+            <!-- <li class="nav-item dropdown">
+              <div id="ex4">
+                <span class="p1 fa-stack fa-2x has-badge" data-count="4">
+                  <i class="p3 fa fa-bell" data-count="4b"></i>
+                </span>
+              </div>
+            </li> -->
+            
+          </ul>
+        </div>
+      </nav>      
+    </header>
+    {% endblock %}
+
+    <ul id="notifylist"></ul>
+
+    <div id="mainbody" class="main_container" style="margin-top:65px;">
+      <audio id="audio" src="/static/audio/office_phone_ringigng.mp3" autostart="false" ></audio>
+
+
+      <div onclick="openForm()"></div>
+      
+      <div class="s"  id="myForm">
+        <form action="/action_page.php" class="form-container">        
+          <div class="modal-header" style="padding: 0px; border: 0px;">
+            <!-- <h5 class="modal-title" id="exampleModalLabel">User</h5> -->
+            <!-- <button type="button" class="closeform" onclick="closeForm()">
+              <span aria-hidden="true">&times;</span>
+            </button> -->
+          </div>
+        
+        <div class="w3-container w3-center">       
+          <!-- <img class="rounded-circle" src="/static/images/iocn/help-desk-icon.png" alt="Avatar" style="width:80%"> -->
+          <h5 id="po"></h5>
+          <!-- <h4>Phone</h4> -->
+          <h6 id="io"> </h6>
+  
+          <div class="row">
+            <!-- <a type="button" class="primary_btn btn-block btn-sm" onclick="sound()" id="contact" href="{% url 'contacts:add_contact' %}">Add Contact</a> -->
+            <!-- <a type="button" class="primary_btn btn-block btn-sm" onclick="sound()" id="case" href="{% url 'cases:add_case' %}">Create Case</a> -->
+          </div>
+        </div>
+        <!-- <button type="button" class="btn cancel" onclick="closeForm()">Close</button> --> 
+        </form>
+      </div>
+      </form>
+    </div>
+    <input type="hidden" id="notifyid" value="{{ request.user.id }}">
+      {% block breadcrumb %}
+      {% endblock %}
+
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+  <input id="countcase" type="text" style="display: none;" value="{{countcase}}">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/static/js/design/bootstrap.min.js"></script>
+  <script src="https://cdnjs.com/libraries/Chart.js"></script>
+
+  <script src="/static/js/design/popper.min.js"></script>
+  
+
+  
+  {% block moment_js_block %}
+ 
+  <script src="/static/js/moment-with-locales.min.js"></script>
+  <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+  {% endblock moment_js_block %}
+
+  <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js"></script>
+ 
+  <script src="/static/js/popper.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+
+
+  {% block extra_js_block %}
+
+
+  <script src="/static/js/select2.min.js"></script>
+  <script src="/static/js/quill.min.js"></script>
+  <script src="/static/js/jquery.blockUI.min.js"></script>
+  {% endblock extra_js_block %}
+
+  <script type="text/javascript" src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/5.0.11/highstock.js"></script>  
+  
+  <script src="/static/js/highcharts-3d.js"></script>
+  <script src="/static/js/exporting.js"></script>
+  <script src="/static/js/export-data.js"></script>
+  <script src="/static/js/accessibility.js"></script>
+
+
+
+  {% block js_block %}{% endblock js_block %}
+  <script type="text/javascript">
+// for Notification link 
+function myFunction() {
+  var cds=document.getElementById('notifyid').value
+        $.ajax({
+            type:"POST",
+            url:"{% url 'cases:notifistatus' %}",
+            data:{
+                "cid":cds
+            },
+            dataTyple:"json",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function (data) {
+                $('#subevent').html(data);
+                     }
+        });
+    localStorage.removeItem("notiid")
+    localStorage.removeItem('noti')
+}
+function myFunction1() {
+  var cds=document.getElementById('notifyid').value
+        $.ajax({
+            type:"POST",
+            url:"{% url 'cases:notifistatus' %}",
+            data:{
+                "cid":cds
+            },
+            dataTyple:"json",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function (data) {
+                $('#subevent').html(data);
+                     }
+        });
+    localStorage.removeItem("notiid")
+    localStorage.removeItem('lead')
+}
+
+
+// notification websocket start
+
+
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+      const webSocketBridge = new channels.WebSocketBridge();
+      const nl = document.querySelector("#notifylist");
+     
+      webSocketBridge.connect('/cases/cases/');
+      webSocketBridge.listen(function (action, stream) {
+        
+          console.log("RESPONSE:", action);
+          if (action.event == "assignuser") {
+            document.getElementById('badge1').value=action.username;
+            document.getElementById('badge2').value=action.leadid
+            localStorage.setItem("noti",action.username)
+            localStorage.setItem('lead',action.leadid)
+            localStorage.setItem("notiid",action.userid)            
+          }
+          if (action.event == "clearuser") {
+          console.log('erres')
+          localStorage.removeItem('noti')
+          }
+          if (action.event == "clearlead") {
+          console.log('erres')
+          localStorage.removeItem('lead')
+          }
+
+      })
+      document.ws = webSocketBridge; /* for debugging */
+  })
+
+
+console.log(localStorage.getItem("noti"),'---------------')
+var uid=localStorage.getItem('notiid')
+console.log(lid,'---lid')
+var cid=document.getElementById('notifyid').value
+console.log(cid,'--cid')
+
+var caseid=localStorage.getItem('noti')
+var leadid=localStorage.getItem('lead')
+
+if( leadid === 'undefined' || leadid === null){
+var  lid=0
+  console.log('yesscase',lid)
+}
+else{
+   lid=localStorage.getItem('lead')
+console.log('no',lid)
+}
+
+if(caseid === 'undefined' || caseid === null){
+var  lid1=0
+  console.log('yleasd',lid1)
+}
+else{
+   lid1=localStorage.getItem('noti')
+console.log('no',lid1)
+}
+var total=Number(lid)+Number(lid1)
+console.log(total,'total---')
+if (total===0){
+
+// document.getElementById('mainnoti').innerHTML=total
+console.log('-jsjs--')
+localStorage.removeItem('noti')
+}
+else{
+ document.getElementById('mainnoti').innerHTML=total
+ 
+}
+if (uid==cid){
+  console.log('cid===lid')
+  if(caseid === 'undefined' || caseid === null){
+    console.log('undefined id')
+  }
+  else{
+    document.getElementById('badge1').innerHTML=localStorage.getItem("noti");
+    console.log('--getout')
+
+  }
+  if( leadid === 'undefined' || leadid === null){
+    console.log('undefied lead')
+  }
+  else{
+document.getElementById('badge2').innerHTML=localStorage.getItem("lead");
+console.log('-----get')
+  }
+}
+
+// notification websocket end
+
+    $(document).ready(function() {
+      $(".megamenu").on("click", function(e) {
+          e.stopPropagation();
+      });
+    });
+    $(document).ready(function () {
+      word = window.location.pathname.split('/')[1];
+      if (word == "") {
+        $("#dashboard").addClass('active');
+      }
+      else {
+        $('#' + word).addClass('active');
+      }
+      marketing_word = window.location.pathname.split('/')[2];
+      if (marketing_word == "") {
+        $("#marketing-dashboard").addClass('active');
+      }
+      // console.log(marketing_word.substring(0,7) === 'contact');
+      else if (marketing_word.substring(0, 7) === "contact") {
+        $("#contact").css({ 'border-bottom': '3px solid #099CBE,' });
+        $(".contact_class").css('border-bottom', '3px solid #099CBE');
+        marketing_word = window.location.pathname.split('/')[2]
+        // console.log(marketing_word)
+        // console.log(marketing_word == 'contact-list')
+        // console.log(marketing_word == 'contacts')
+        if (marketing_word == 'contact-list') {
+          $(".contact-list").css('background', '#e5e5e5');
+        }
+        if (marketing_word == 'contacts') {
+          $(".contacts").css('background', '#e5e5e5');
+        }
+        // $("#contacts").css('background','#e5e5e5');
+      }
+      else {
+        $('#' + marketing_word).addClass('active')
+      }
+    });
+  /*
+      Usage is very simple; to block user activity for the page:
+        $.blockUI();
+  
+      Blocking with a custom message:
+        $.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' });
+  
+      Blocking with custom style:
+        $.blockUI({ css: { backgroundColor: '#f00', color: '#fff'} });
+  
+      To unblock the page:
+        $.unblockUI();
+  
+      If you want to use the default settings and have the UI blocked for all ajax requests, it's as easy as this:
+        $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+    */
+  </script>
+
+<script>
+  
+jQuery(function($) {
+  var abc = document.getElementById('dropdownMenu1')
+  var def = document.getElementById('dropdownMenu2')
+  var ghi = document.getElementById('dropdownMenu3')
+  var xyz = document.getElementById('dropdownMenu4')
+  var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
+  var namepath = window.location.pathname;
+  console.log(namepath, '==================')
+  // var mon = namepath.split(/[\\\/]/);
+  // console.log('===============',mon)
+  var lop = JSON.stringify(namepath).split('/')
+  console.log('-----------', lop)
+  var second = "";
+  var third = "";
+  if (lop.length > 0) {
+    second = lop[lop.length-2];
+  }
+  if (lop.length > 0) {
+    third = lop[lop.length-3];
+  }
+  console.log(third);
+
+  if( namepath == '/cases/cases/' || namepath == '/contacts/' || namepath == '/cases/' || 
+    namepath == '/cases/sla/' || namepath == '/individual/' || namepath == '/cases/individual/' || 
+    namepath=='/cases/create/' || namepath=='/cases/sla/allsla/' || namepath == '/contacts/create/' || 
+    third == 'edit' || second == 'edit_case' || second == 'edit_contact') {
+   abc.style.backgroundColor = 'rgb(5, 12, 92)';
+   abc.style.borderBottom = '3px solid rgb(5, 12, 92)'
+ } 
+  if( namepath == '/sales/' || namepath == '/salesind/'|| namepath == '/accounts/' || namepath == '/leads/' || namepath == '/opportunities/' ||
+    namepath == '/accounts/create/' || namepath == '/leads/create/' || namepath == '/opportunities/create/' || 
+    second == 'edit_account' || second == 'edit_lead' || second == 'edit_opportunity') {
+      def.style.backgroundColor = 'rgb(5, 12, 92)';
+      def.style.borderBottom = '3px solid rgb(5, 12, 92)'
+ } 
+  if(namepath == '/marketing/' || namepath == '/marketing/contact-list/' || namepath == '/marketing/contacts/' || 
+    namepath == '/marketing/email-templates/' || namepath == '/marketing/campaigns/' || namepath == '/marketing/contact-list/create/' ||
+    namepath == '/marketing/email-templates/create/' || namepath == '/marketing/campaigns/create/' ||
+    second == 'edits' || second == 'edt') {
+      ghi.style.backgroundColor = 'rgb(5, 12, 92)';
+      ghi.style.borderBottom = '3px solid rgb(5, 12, 92)'
+ }
+ if(namepath == '/mail/' || namepath == '/mail/view/'){
+      xyz.style.backgroundColor = 'rgb(5, 12, 92)';
+      xyz.style.borderBottom = '3px solid rgb(5, 12, 92)'
+ }
+ 
+
+ $('ul a').each(function() {
+  if (this.href === path) {
+   $(this).addClass('active');
+
+  }
+ });
+
+  if(namepath == '/contacts/create/' || second == 'edit_contact' ) {
+   document.getElementById('contact_id').classList.add('active')
+ }
+ if(namepath == '/cases/create/' || second == 'edit_case' || namepath == '/cases/individual/') {
+  document.getElementById('cases_id').classList.add('active')
+ }
+
+ if(namepath == '/accounts/create/' || second == 'edit_account') {
+  document.getElementById('account_id').classList.add('active')   
+ }
+
+ if(namepath == '/leads/create/' || second == 'edit_lead') {
+  document.getElementById('lead_id').classList.add('active')   
+ }
+
+ if(namepath == '/opportunities/create/' || second == 'edit_opportunity'){
+  document.getElementById('opportunities_id').classList.add('active') 
+ }
+ if(namepath == '/marketing/contact-list/create/' || second == 'edt') {
+   document.getElementById('contact-lists').classList.add('active')
+ }
+ if(namepath == '/marketing/email-templates/create/' || second == 'edits') {
+   document.getElementById('email_template').classList.add('active')
+ }
+ if(namepath == '/marketing/campaigns/create/') {
+  document.getElementById('campaign_list').classList.add('active')
+ }
+
+ if(namepath == '/cases/sla/allsla/' || third == 'edit') {
+  document.getElementById('sla_id').classList.add('active')
+ }
+ 
+ 
+});
+
+
+
+</script>
+
+
+<script>
+//   setInterval(function(){ 
+//   $.ajax({
+//     url: '/contacts/email/',
+//     data: {'a':1,'b':2,'c':3},
+//     dataType: 'xml',
+//     complete : function(){
+//       console.log('sucess')
+//     },
+//     success: function(xml){
+//     }
+// });
+// }, 3000);
+  var sound = document.getElementById("audio");
+  document.addEventListener('DOMContentLoaded', function () {
+      const webSocketBridge = new channels.WebSocketBridge();
+      const nl = document.querySelector("#notifylist");
+
+      webSocketBridge.connect('/contatcts/');
+      webSocketBridge.listen(function (action, stream) {
+          console.log("RESPONSE:", action);
+          if (action.event == "New User") {
+              var el = document.createElement("li");
+              // el.innerHTML = `A user <b>${action.user}</b> `;
+              var fl1 = "Unknown Number"
+              var fl2 = action.phone
+              var fl3 = action.user
+              openForm(action.phone, fl1, action.user)
+              document.getElementById("case").style.display = "none";
+              document.getElementById("contact").style.display = "block";
+
+              localStorage.setItem("phone",fl2);
+              // localStorage.setItem("name",fl1);
+
+              // nl.appendChild(el);
+              console.log('new')
+              // addcon(action.phone)
+          }
+          else if (action.event == "emailnewcontact") {
+            var emails =action.newemailcase
+            localStorage.setItem('emailcontact',emails)
+            console.log('ssss')
+          }
+          else {
+            var fl1 = action.username
+              var fl2 = action.phone
+              var fl3 = action.user
+              console.log("old user")
+              openForm(action.phone, action.username, action.user)
+              localStorage.setItem("phone",fl2);
+              localStorage.setItem("name",fl1);
+              document.getElementById("case").style.display = "block";
+              document.getElementById("contact").style.display = "none";
+
+
+          }
+      })
+      document.ws = webSocketBridge; /* for debugging */
+  })
+  function sound(){
+    sound.pause()
+  }
+  function openForm(av, vc) {
+    
+          sound.play()
+      console.log('dddddd', vc)
+      document.getElementById('po').innerHTML = vc
+      document.getElementById('io').innerHTML = av
+      document.getElementById("myForm").style.display = "block";
+  }
+
+  // function closeForm() {
+  //     document.getElementById("myForm").style.display = "none";
+
+
+  // }
+
+
+
+
+</script>
+
+
+ <style>
+
+
+.s{
+
+color: #fff!important;
+  background-color: #616161!important;
+  display: none;
+      position: fixed;
+      bottom: 6px;
+      right: 10px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+      width: 18%;
+
+}
+.w3-center {
+  text-align: center!important;
+}
+.w3-container, .w3-panel {
+  padding: 0.01em 16px;
+}
+.w3-section, .w3-code {
+  margin-top: 16px!important;
+  margin-bottom: 16px!important;
+}
+.w3-green, .w3-hover-green:hover {
+  color: #fff!important;
+  background-color: #4CAF50!important;
+}
+.w3-red, .w3-hover-red:hover {
+  color: #fff!important;
+  background-color: #f44336!important;
+}
+
+
+
+  body {
+      font-family: Arial, Helvetica, sans-serif;
+  }
+
+  * {
+      box-sizing: border-box;
+  }
+  header .navbar .navbar-nav .nav-item a.active {
+  font-weight: 700;
+  color:#54b7c6 !important;
+  border-bottom: 3px solid white;
+  background-color:  rgb(5, 12, 92);
+  /* #54b7c6 */
+}
+header .navbar .navbar-nav .nav-item a{
+  color:white!important;
+  border-bottom: 3px solid #099CBE;
+}
+header .navbar .navbar-nav.navbar-right .dropdown a{
+  color: 54b7c6 !important;
+}
+.form-container{
+  background: #5193f7 !important;
+  border-bottom: 3px solid white;
+}
+  /* Button used to open the chat form - fixed at the bottom of the page */
+  .open-button {
+      /* background-color: #555; */
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      opacity: 0.8;
+      position: fixed;
+      bottom: 23px;
+      right: 28px;
+      width: 200px;
+    /* border-radius: 50%; */
+  }
+#msg{
+  font-size: large;
+}
+  /* The popup chat - hidden by default */
+  .chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      right: 10px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+      width: 25%;
+  }
+
+  /* Add styles to the form container */
+  .form-container {
+      max-width: 300px;
+      padding: 10px;
+      background-color: white;
+  }
+
+  /* Full-width textarea */
+  .form-container textarea {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      border: none;
+      background: #f1f1f1;
+      resize: none;
+      min-height: 200px;
+  }
+
+  /* When the textarea gets focus, do something */
+  .form-container textarea:focus {
+      background-color: #ddd;
+      outline: none;
+  }
+
+  /* Set a style for the submit/send button */
+  .form-container .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+      opacity: 0.8;
+  }
+
+  /* Add a red background color to the cancel button */
+  .form-container .cancel {
+      background-color: red;
+  }
+
+  /* Add some hover effects to buttons */
+  .form-container .btn:hover,
+  .open-button:hover {
+      opacity: 1;
+  }</style>
+
+
+ 
+</body>
+
+{% load staticfiles %}
+{% load compress %}
+{% load thumbnail %}
+
+ 
+</html>

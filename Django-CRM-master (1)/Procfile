@@ -1,0 +1,2 @@
+web: gunicorn crm.wsgi --log-file -
+web: daphne crm.asgi:application --port $PORT --bind 0.0.0.0

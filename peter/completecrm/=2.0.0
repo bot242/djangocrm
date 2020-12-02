@@ -1,0 +1,2 @@
+Requirement already satisfied: elasticsearch in /home/zoogle/.local/lib/python3.6/site-packages
+Requirement already satisfied: urllib3>=1.21.1 in /home/zoogle/.local/lib/python3.6/site-packages (from elasticsearch)

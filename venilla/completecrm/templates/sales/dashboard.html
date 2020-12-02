@@ -1,0 +1,534 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% block extralinks %} 
+
+<style>
+  .text_ellipsis {
+    width: 16em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .colrs1{
+    background-image: linear-gradient(45deg,#5b2bea 0%,#2f75ff 90%) !important;
+    padding:20px;
+    border-radius: 3px;
+  }
+  .colrs2{
+    background-image: linear-gradient(45deg, #f36d2c 0%,#ffb922 90%) !important;
+    padding:20px;
+    border-radius: 3px;
+  }
+  .colrs4{
+    background-image: linear-gradient(45deg,#01ab8f 0%,#8bc344 90%) !important;
+    padding:15px;
+    border-radius: 3px;
+  }
+  .colrs3{
+    background-image: linear-gradient(45deg,#ff2b6a 0%,#ff6b00 90%) !important;
+    padding:20px;
+    border-radius: 3px;
+  }
+  .progress-bar {
+    background-color: #ffc107 !important;
+  }
+  .dot1 {
+  background-color: #4e01a5;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+}
+.dot2 {
+  background-color: #ab5000;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+}
+.dot3 {
+  background-color: #018150;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+}
+.dot5 {
+  background-color: #ac0229;
+  border-radius: 50%;
+  padding: 10px;
+  text-align: center;
+  color: #fff;
+}
+section.dashboard-counts div[class*='col-'] .item {
+    /* border-right: 1px solid #eee; */
+    padding: 0px 0px !important;
+    /* text-align: center!important; */
+    /* padding-left: 30px; */
+}
+section.dashboard-counts div[class*='col-'] .item1 {
+    padding: 0px 0px;
+    /* text-align: center!important; */
+    /* padding-left: 30px; */
+}
+section.dashboard-counts .number {
+    font-size: 1.0em !important;
+    color: #fff;
+    font-weight: 300;
+}
+section.dashboard-counts .title {
+    font-size: 1.5em !important; 
+    font-weight: 300;
+    color: #fff;
+    width:100%;
+    /* margin: 0 25px; */
+}
+section.dashboard-counts .row {
+    padding: 0px 0px 30px 0px !important;
+    /* margin: 0; */
+ 
+}
+.heading {
+  padding:0px;
+}
+.fa-2x {
+    font-size: 1.5em;
+}
+body {
+    font-family: "Quicksand", sans-serif;
+    padding: 0;
+    font-weight: 500;
+    margin: 0 !important;
+    font-size: 14px;
+    background: #ffffff;
+}
+.title1 {
+    float:left;
+    font-size: 1.3em !important;
+    font-weight: 300;
+    color: #fff;
+    margin: 0 15px !important;
+  }
+
+</style>
+{% endblock %}
+{% block content %}
+{% load common_tags %}
+
+<div class="col-md-12">
+  <div class=" row heading2">
+    <div class="title1  float-left" style="color: #aaa;"><b>Dashboard</b></div>
+  </div>
+  <div class="row">
+
+    
+    <!-- <div class="col-md-3 float-right"> -->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="form-control-label pt-3 pl-1 pr-3"><b>From Date</b></label>
+              <div class="pt-2 pr-3">
+                <input id="datepicker" type="datepicker" style="width:200px" class="form-control" name="date" value="{{date}}" placeholder="Select Date" />
+              </div>
+              
+              <label class="form-control-label pt-3 pl-1 pr-3"><b>To Date</b></label>
+              <div class="pt-2">
+                <input id="topicker" type="datepicker" style="width:200px" class="form-control"  name="tod" value="{{tod}}"  placeholder="To Date" />
+              </div>
+              <div class="pl-4 pt-2">
+                <form id="date_filter" method="GET" action="{% url 'common:dashboard' %}">
+                  <input id="dates" type="hidden" name="status" style="display: none;">
+                  <input id="todate" type="hidden" name="tostatus" style="display: none;">
+                  <button type="submit" style="width:100px" class="btn btn-success">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    <!-- </div> -->
+  </div>
+</div>
+
+<div class="col-md-12">
+  <section class="dashboard-counts">
+    <!-- <div class="container-fluid"> -->
+      <div class="row">
+        <div class="col-xl-4 col-md-4 col-sm-6 ">
+          <div class="colrs3">
+            <a href="{% url 'cases:list' %}">
+              <div class="item d-flex align-items-center">
+                <div class="dot5 bg-violet"><i class="fas fa-briefcase fa-2x"></i> </i></div>
+                <div class="title"><span>Cases</span>
+                  <div class="number"><strong>{{countcase}}</strong></div>
+                  <!-- <div class="progress">
+                    <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
+                  </div> -->
+                </div>
+                
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-xl-4 col-md-4 col-sm-6 ">
+          <div class="colrs1">
+            <a href="{% url 'opportunities:list' %}">
+              <div class="item d-flex align-items-center">
+                <div class="dot1 bg-violet"><i class="fa fa-users fa-2x"></i></div>
+                <div class="title"><span>Sales - Opportunities</span>
+                  <div class="number"><strong>{{countopportunities}}</strong></div>
+                  <!-- <div class="progress">
+                    <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar"></div>
+                  </div> -->
+                </div>
+                
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-xl-4 col-md-4 col-sm-6 ">
+          <div class="colrs2">
+            <a href="{% url 'marketing:campaign_list' %}">
+              <div class="item d-flex align-items-center">
+                <div class="dot2 bg-red"><i class="fas fa-money-check-alt fa-2x"></i></i></div>
+                <div class="title"><span>Marketing - Campaign</span>
+                  <div class="number"><strong>{{count_marketing}}</strong></div>
+                  <!-- <div class="progress">
+                    <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar"></div>
+                  </div> -->
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <!-- <div class="col-xl-3 col-md-3 col-sm-6">
+          <div class="colrs4">
+            <a href="{% url 'contacts:list' %}">
+              <div class="item1 d-flex align-items-center">
+                <div class="dot3 bg-orange"><i class="fa fa-user-circle fa-2x"></i></div>
+                <div class="title"><span>Contacts</span>
+                  <div class="number"><strong>{{countcontact}}</strong></div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div> -->
+        
+        
+      </div>
+    <!-- </div> -->
+  </section>
+</div>
+
+    <div class="col-md-12">
+      <section class="dashboard-header">
+        <div class="row ">
+          <div class="col-lg-6">
+            <div class="pie-chart-example card">
+              <div class="card-header d-flex align-items-center mb-5 pb-4">
+                <h3 class="h4">Case Status</h3>
+              </div>
+              <div class="card-body mb-5 pb-3">
+                <!-- <canvas id="count"></canvas> -->
+                <div id="case"></div>
+              </div>
+            </div>
+          </div>
+          
+        <div class="col-lg-6">
+          <div class="pie-chart-example card">
+            <div class="card-header d-flex align-items-center mb-5 pb-4">
+              <h3 class="h4">Sales Pipeline</h3>
+            </div>
+            <div class="card-body pb-3" style="padding-right:8px;">
+              <!-- <canvas id="count"></canvas> -->
+              <!-- <div id="count"></div> -->
+              {% if graph %}
+                <div id="funnelExample"> {{ graph|safe }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      </section>
+    </div>
+   
+    <!-- <div class="col-md-12 mb-5" style="margin-top:30px"> -->
+      <section class="charts">
+        
+        <div class="row">
+          <!-- <div class="col-lg-6">
+            <div class="line-chart-example card">
+              <div class="card-header d-flex align-items-center">
+                <h3 class="h4">Annual Sales</h3>
+              </div>
+              <div class="card-body">
+                {% if graph %}
+                <div id="funnelExample"> {{ graph|safe }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div> -->
+          <!-- <div class="col-md-6">
+            <div class="bar-chart-example card">
+              <div class="card-header mb-3 d-flex align-items-center">
+                <h3 class="h4">Sales Amount</h3>
+              </div>
+              <div class="card-body mr-2">
+                <canvas id="myChart"></canvas>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </section> 
+    </div> 
+      
+  </div>
+</div>
+
+{% endblock %}
+{% block js_block %}
+<script src="/static/js/design/Chart.min.js"></script>
+<script src="/static/js/charts-home.js"></script>
+<script src="/static/js/charts-custom.js"></script>
+<script>
+var currentTime = new Date();
+var startDateFrom = new Date(currentTime.getFullYear(),currentTime.getMonth(),1);
+console.log(startDateFrom, "---> startDateFrom")
+var startDateTo = new Date(currentTime.getFullYear(),currentTime.getMonth() +1,0);
+console.log(startDateTo, "startDateTo")
+var today = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate());
+
+// From date picker
+var ftg = document.getElementById('datepicker').value
+console.log(ftg,"---------->>>>>>>>")
+var ftgbn = document.getElementById('topicker').value
+console.log(ftgbn,"---------->>>>>>>>")
+
+var myform = document.getElementById('date_filter');
+myform.onsubmit = function(){ 
+  var fromdate = document.getElementById('datepicker').value
+    document.getElementById('dates').value = fromdate
+    var todate = document.getElementById('topicker').value
+    document.getElementById('todate').value = todate
+    myform.submit();
+};
+
+$('#datepicker').datepicker({
+    dateFormat: 'dd-mm-yy',
+    // minDate: startDateFrom,
+    maxDate: '0',
+    onSelect: function(selected) {
+      $("#topicker").datepicker("option","minDate", selected)
+    }
+  })
+$('#topicker').datepicker({
+  dateFormat: 'dd-mm-yy', 
+  maxDate: '0',
+  onSelect: function(selected) {
+      $("#topicker").datepicker("option","minDate", selected)
+    }
+})
+    // .on("input change", function (e) {
+    //   console.log("Date changed: ", e.target.value);
+    //   var todates = e.target.value
+    //   var fromdate = document.getElementById('datepicker').value
+    //   document.getElementById('dates').value = fromdate
+
+    //   var todate = document.getElementById('topicker').value
+    //   document.getElementById('todate').value = todate
+
+    //   $("#datepicker").datepicker("option","maxDate", todate) 
+    //   $('#date_filter').submit();
+
+    // })
+
+  
+
+
+//   Highcharts.chart('count', {
+    
+//     chart: {
+//         type: 'pie'
+//     },
+//     title: {
+//         text: 'Sales'
+//     },
+//     xAxis: {
+//         title:{
+//           text:"Stages"
+//         },
+//         categories: [
+//        "Opportunities","Lead","Account","Contact"
+
+//         ],
+//         crosshair: true
+//     },
+//     yAxis: {
+//         // allowDecimals: false,
+//         title: {
+//             text: 'Units'
+//         }
+//     },
+//     tooltip: {
+//         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+//         pointFormat: '<tr><td style="color:{series.color};padding:0">Status: </td>' +
+//             '<td style="padding:0"><b>{point.y:1f} </b></td></tr>',
+//         footerFormat: '</table>',
+//         shared: true,
+//         useHTML: true
+//     },
+//     plotOptions: {
+//       pie: {
+//         allowPointSelect: true,
+//         cursor: 'pointer',
+//         dataLabels: {
+//           enabled: false
+//         },
+//         showInLegend: true,
+//         column: {
+//           pointPadding: 0.2,
+//           borderWidth: 0
+//         }
+//       }
+        
+//     },
+//     colors: ['#f00e19', '#f36d2c', '#5b2bea','#1E8449'],
+//     credits: {
+//       enabled: false
+//     },
+//     series: [{
+      
+//         data: [[name='Opportunities',{{countopportunities}}],
+//         [name='Lead',{{countlead}}],
+//         [name='Account',{{countaccount}}],
+//         [name='Contact',{{countcontact}}],]
+//     }]
+// });
+
+Highcharts.chart('case', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45
+        }
+    },
+    title: {
+        text: 'Case Status'
+    },
+   
+    plotOptions: {
+        pie: {
+          allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: false
+        },
+        showInLegend: true,
+        innerSize: 100,
+        depth: 45
+        }
+    },
+    colors: ['#5b2bea', '#f36d2c', 'rgb(15, 238, 182)'],
+    credits: {
+      enabled: false
+    },
+    series: [{
+        name: 'Status',
+        data: [
+            [name='Open', {{open}}],
+            [name='In Progress', {{inprogress}}],
+            [name='Closed', {{closed}}]
+        ],
+        point: {
+             events: {
+                click: function() {
+                    // alert ('Status: '+ this.name +', value: '+ this.y);
+                }
+            }
+        }
+
+    }]
+});
+
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    options: {
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Sum of amount'
+          },
+          ticks: {
+            // min: 0,
+
+            // beginAtZero:true,
+            suggestedMin: 0, //min
+            suggestedMax: 100, //max 
+
+            // stepSize: 1
+
+          }
+        }]
+      },
+      legend: {
+        display: false
+      },
+    },
+    data: {
+        labels: [ "Qualification",
+        "Need Analysis",
+        "Value Propositon",
+        "Decision makers",
+        "Perception",
+        "Proposal/Price Quote",
+        "Negotiation",
+        "Closed Won"],
+        datasets: [{
+            
+            
+            data: [
+              {{qualification}},
+              {{needanalysis}},
+              {{valueproposition}},
+              {{decisionmakers}},
+              {{perception}},
+              {{proposalquote}},
+              {{negotiation}},
+              {{closedwon}}
+            ],
+            backgroundColor: [
+               '#4662a0',
+               '#aadb87',
+               '#da495b',
+               '#a87bc6',
+               '#fde5a5',
+               '#66ceed',
+	             '#d565ad',
+	             '#7ea45d',
+            ],
+            // borderColor: [
+            //     'rgba(255, 99, 132, 1)',
+            //     'rgba(54, 162, 235, 1)',
+            //     'rgba(255, 206, 86, 1)',
+            //     'rgba(75, 192, 192, 1)',
+            //     'rgba(153, 102, 255, 1)',
+            //     'rgba(255, 159, 64, 1)'
+            // ],
+            // borderWidth: 1
+        }]
+    },
+	 
+    
+});
+
+</script>
+
+{% endblock js_block %}

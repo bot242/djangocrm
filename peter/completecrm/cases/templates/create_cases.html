@@ -1,0 +1,1029 @@
+{% extends 'sales/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+{% block extralinks %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet"/>
+<link href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" rel="stylesheet"/>
+{% endblock %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'cases:list' %}">Cases</a></li>
+    <li class="breadcrumb-item active">{% if case_obj %}Edit{% else %}Create{% endif %}</li>
+  </ol>
+</nav>
+{% endblock %}
+{% block content %}
+<form id="submitForm" method="POST" action="" novalidate enctype="multipart/form-data">
+  <div class="overview_form_block row marl justify-content-center">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title  pannel">
+            <span>{% if case_obj %}EDIT{% else %}CREATE{% endif %} CASE</span>
+            <span id="stitle1" class="float-right" style="display: none;">SL TIMER: <b>
+                {% if case_obj %}
+                <!-- {{case_obj.sla|date:'H:i:s'}} -->
+                <span id="reds">
+                  <b>
+                    <span id="hh"></span>:
+                    <span id="mm"></span>:
+                    <span id="ss"></span>
+                  </b>
+                </span>
+
+                <div id='sla' style="display: none;">{{case_obj.sla|date:"M d,Y H:i:s"}}</div>
+                <input type="hidden" name="reds" value="{{case_obj.sla|date:'Y-m-d H:i:s'}}">
+                {% else %}
+
+                <span id="reds">
+
+                  <b>
+                    00:00:00
+                  </b>
+                </span>
+                {% endif %}
+              </b> HRS
+
+            </span>
+
+            <span id="stitle2" class="float-right" style="display: none;">SL TIMER: <b>
+                <span id="cass"></span>
+              </b>
+            </span>
+          </div>
+
+          <div class="row marl">
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_case_number" class="required">Case
+                    number{% if case_form.case_number.field.required %}<span class="error">*</span>{% endif %}</label>
+                </div>
+                <div class="col-md-8">
+                  {{ case_form.case_number }}
+                  <span class="error error_message" id="error_id_case_number">{{ case_form.case_number.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="exampleInputEmail1" class="required">Creation
+                    date/time{% if case_form.creation_date.field.required %}<span
+                      class="error">*</span>{% endif %}</label>
+                </div>
+                <div class="col-md-8">
+                  <div class='input-group date' id='datepicker2'>
+                    {% if case_obj %}
+                    <input id="createdate" type="text" name="creation_date" readonly class="form-control"
+                      value="{{creation_date|date:'d-m-Y H:i:s'}}">
+                    {% else %}
+                    {{ case_form.creation_date}}
+                    {% endif %}
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span><link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+                  </div>
+                  <span class="error error_message"
+                    id="error_id_creation_date">{{ case_form.creation_date.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_status"  class="required">Status{% if case_form.status.field.required %}<span
+                      class="error">*</span>{% endif %}</label></div>
+                <div class="col-md-8">
+                  <!-- {{ case_form.status  }} -->
+                  {% render_field case_form.status class+="vj" onchange="val()" %}
+                  <span class="error error_message" id="error_id_status">{{ case_form.status.errors }}</span></div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_name" class="required">Contact name{% if case_form.name.field.required %}<span
+                      class="error">*</span>{% endif %}</label>
+                </div>                        
+                <div class="col-md-8">
+                  {{ case_form.name }}
+                  <span class="error error_message" id="error_id_name">{{ case_form.name.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_phone1" class="required">Phone/Mobile</label></div>
+                <div class="col-md-8">
+                  {% render_field case_form.phone1 pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==11) return false;" %}
+                  <span class="phonealert"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_email" class="required">Email address
+                    <!-- {% if case_form.email.field.required %}<span class="error">*</span>{% endif %} -->
+                  </label></div>
+                <div class="col-md-8">
+                  {{ case_form.email }}
+                  <!-- <span class="error error_message" id="error_id_phone">{{ case_form.email.errors }}</span> -->
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_address" class="required">Address</label>
+                </div>
+                <div class="col-md-8">
+                  {{ case_form.address }}
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_case_type">Category{% if case_form.case_type.field.required %}<span
+                      class="error">*</span>{% endif %}</label></div>
+                <div class="col-md-8">
+                  <!-- {{ case_form.case_type }} -->
+                  {% render_field case_form.case_type class+="vj" %}
+                  <span class="error error_message" id="error_id_case_type">{{ case_form.case_type.errors }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="line filter_col col-md-4">
+              <div class="row">
+          
+                <div class="col-md-4">
+                  <label for="id_action_items">Case description</div>
+                <div class="col-md-8">
+                  {{ case_form.description }}
+                </div>
+              </div>
+            </div>
+
+       
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_action-items" class="required">Action items</label>
+                </div>
+                <div class="col-md-8">
+                  {{ case_form.action_items }}
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_priority" class="required">Priority{% if case_form.priority.field.required %}<span
+                      class="error">*</span>{% endif %}</label></div>
+                <div class="col-md-8">
+                  <!-- {{ case_form.priority }} -->
+                  {% render_field case_form.priority class+="vj" %}
+          
+                  <span class="error error_message" id="error_id_priority">{{ case_form.priority.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="exampleInputEmail1" class="required">Related case
+                  </label>
+                </div>
+                <div class="col-md-8">
+                  <div class='input-group date' id='datepicker3'>
+                    
+                    {{ case_form.parent_case }}
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                  <span class="error error_message" id="error_id_assigned_date">
+                    {{ case_form.assigned_date_on.errors }}
+                  </span>
+                </div>
+              </div>
+            </div>
+        
+            {% if request.user.is_superuser or request.user.role  == "ADMIN" %}
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="exampleInputEmail1" class="required">Assigned To
+                    {% if case_form.assigned_to.field.required %}<span class="error">*</span>{% endif %}
+                  </label>
+                </div>
+                <div class="col-md-8">
+                  <select class="assigned_users form-control " name="assigned_to" multiple="multiple"
+                    id="id_assigned_to">
+                    {% for user in users %}
+                    <option value="{{user.id}}"
+                      {% if user == request.user or user in case_obj.assigned_to.all or user.id in assignedto_list %}
+                      selected="selected" {% endif %}>
+                      {{user.email}}</option>
+                    {% endfor %}
+                  </select>
+                  <span class="error error_message" id="error_id_assigned_to">{{ case_form.assigned_to.errors }}</span>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            <!-- teams  -->
+            {% if request.user.is_superuser or request.user.role == 'ADMIN' %}
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="id_sattus">Groups{% if case_form.teams.field.required %}<span
+                      class="error">*</span>{% endif %}</label>
+                </div>
+                <div class="col-md-8">
+                  <select name="teams" id="id_teams" class="assigned_users form-control" multiple>
+                    {% for team in teams %}
+                    <option data-users="{{team.get_users}}" value="{{team.id}}" {% if team in case_obj.teams.all %}
+                      selected="" {% endif %}>
+                      {{team}}</option>
+                    {% endfor %}
+                  </select>
+                  <span class="error" id="id__teams">{{ case_form.teams.errors }}</span>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- assign date -->
+            {% if request.user.is_superuser or request.user.role  == "ADMIN" %}
+            <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="exampleInputEmail1" class="required">Assigned
+                    date/time
+                    {% if case_form.assigned_date.field.required %}<span class="error">*</span>{% endif %}
+                  </label>
+                </div>
+                <div class="col-md-8">
+                  <div class='input-group date' id='datepicker3'>
+                    {% if case_obj %}
+                    <input type="text" name="assigned_date" value="{{assigned_date|date:'d-m-Y H:i:s'}}"
+                      class="form-control" readonly="" placeholder="Assigned date" required="" id="id_assigned_date">
+                    {% else %}
+                    {{ case_form.assigned_date }}
+                    {% endif %}
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                  <span class="error error_message" id="error_id_assigned_date">
+                    {{ case_form.assigned_date_on.errors }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- <div class="line filter_col col-md-4">
+              <div class="row">
+                <div class="col-md-4 ">
+                  <label for="id_remarks" class="required">Remarks</div>
+                <div class="col-md-8">
+                  {{ case_form.remark }}
+                </div>
+              </div>
+            </div> -->
+
+
+            <div class="line filter_col col-md-4" id="parent_descpt" style="display: none;">
+              <div class="row">
+
+                <div class="col-md-4">
+                  <label for="id_parent_description">Related case Description</div>
+                <div class="col-md-8">
+                  {{ case_form.parent_description }}
+                </div>
+              </div>
+            </div>
+            <div class="line filter_col col-md-4" id="close_dats" style="display: none;">
+              {% if case_obj %}
+              <div class="row">
+                {% if request.user.is_superuser or request.user.role  == "ADMIN" %}
+                <div class="col-md-4">
+                  {%else%}
+                  <div class="col-md-4">
+                    {%endif%}
+                    <label for="exampleInputEmail1" class="required">Close
+                      Date{% if case_form.closed_on.field.required %}<span class="error">*</span>{% endif %}</label>
+                  </div>
+                  <div class="col-md-8">
+                    <div class='input-group date' id='datepicker1'>
+                      <input type="text" name="closed_on" value="{{closed_on|date:'d-m-Y H:i:s'}}"
+                      class="form-control" readonly="" placeholder="Close date" required="" id="id_closed_on">
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
+                    <span class="error error_message" id="error_id_closed_on">{{ case_form.closed_on.errors }}</span>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+       
+          
+
+
+            <!-- <div class="row" id="show"> -->
+              <!-- <div class="col-md-12"> -->
+                <div class="ml-3 mr-3 mt-5" style="display: none;" id="parent_table">
+                  <table class="zui-table">
+                      <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Account</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Category</th>
+                            <th>Created on</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td width="15%" id='name1' class="text-center"></td>
+                          <td width="15%" id="account1" class="text-center"></td>
+                          <td width="15%" id="status1" class="text-center"></td>
+                          <td id="priority1" width="15%" class="text-center"></td>
+                          <td id="category1"  width="20%"  class="text-center"></td>
+                          <td id="created1" width="30%" class="text-center"></td>
+                        </tr>
+                      </tbody>
+                  </table>
+                </div>
+              <!-- </div> -->
+          <!-- </div> -->
+
+            
+            <input type="hidden" name="from_account" value="{{request.GET.view_account}}">
+            {% if request.GET.view_account %}
+            <input type="hidden" name="account" value="{{request.GET.view_account}}">
+            {% endif %}
+            <input type="hidden" id="save_new_form" name="savenewform">
+            <div class="col-md-12 mt-5 mb-3">
+              <div class="col-md-12 marl buttons_row form_btn_row">
+                <button class="btn btn-success" type="submit" id="submit_btn" style="font-size: 16px;">Save</button>
+                {% if not case_obj %}
+                <!-- <button class="btn btn-success save savenew" type="submit">Save & New</button> -->
+                {% endif %}
+                <a {% if request.GET.view_account %} href="{% url 'accounts:view_account' request.GET.view_account %}"
+                  {% else %} href="{% url 'cases:list' %}" {% endif %} class="btn btn-danger">Cancel</a>
+                {% if case_obj %}
+                <input type="button" id="id_view" class="btn btn-secondary log" value="View Change Log"
+                  onclick="window.open('http:/../cases/changelog/','popUpWindow','height=600,width=900,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes');">
+                {% endif %}
+                <!-- <input type="hidden" value="{{pk}}" id = "id_pk"> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br clear="all">
+  </div>
+</form>
+  <!-- Modal content -->
+
+<div id="myModal" class="modal">
+  <div id="crm_parent" class="modal-content">
+    <div class="pb-3">
+      <label style="font-size: 18px;"><b>List of Cases</b></label>
+      <span class="close"><b>&times;</b></span>
+    </div>
+    <!-- <div class="float-right pb-3"> -->
+      
+    <!-- </div> -->
+    <table id="example" class="table table-striped table-bordered" cellspacing="0" style="width:100%">
+      <thead  class="theadhover">
+          <tr>
+              <th></th>
+              <th>S.No</th>
+              <th>Case Id</th>
+              <th>Name</th>
+              <th>Account</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Category</th>
+              <th>Created On</th>
+              <th style="display: none;">Description</th>
+          </tr>
+      </thead>
+      <tbody  class="theadhover">
+        {% for case in cases%}
+          <tr>
+              <td></td>
+              <td>{{forloop.counter}}</td>
+              <td>{{case.case_number}}</td>
+              <td>{{case.name}}</td>
+              <td>{{ case.account }}</td>
+              <td>{{ case.status }}</td>
+              <td>{{ case.priority }}</td>
+              <td>{{case.case_type}}</td>
+              <td>{{ case.created_on|date:"M d,Y H:i:s"}}</td>
+              <td  style="display: none;">{{case.description}}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+      <!-- <tfoot>
+          <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Office</th>
+              <th>Age</th>
+              <th>Start date</th>
+              <th>Salary</th>
+          </tr>
+      </tfoot> -->
+    </table>
+    <div class="col-md-6 mt-3" >
+      <button type="button" class="btn btn-success" id="selectedrow">Submit</button>
+      <button type="button" class="btn btn-danger" id='closeModal'>Cancel</button>
+    </div>
+  </div> 
+</div>
+{% if case_obj %}
+<div id="myModal" class="modal">
+  <div id="crm_parent" class="modal-content">
+    <div class="pb-3">
+      <label style="font-size: 18px;"><b>List of Cases</b></label>
+      <span class="close"><b>&times;</b></span>
+    </div>
+    <table id="example" class="display" class="table table-striped table-bordered" style="width:100%">
+      <thead class="theadhover">
+          <tr>
+              <th></th>
+              <th>S.No</th>
+              <th>Case Id</th>
+              <th>Name</th>
+              <th>Account</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Category</th>
+              <th>Created On</th>
+              <th  style="display: none;">Description</th>
+          </tr>
+      </thead>
+      <tbody class="theadhover">
+        {% for case in cases%}
+          <tr>
+              <td></td>
+              <td>{{forloop.counter}}</td>
+              <td>{{case.case_number}}</td>
+              <td>{{case.name}}</td>
+              <td>{{ case.account }}</td>
+              <td>{{ case.status }}</td>
+              <td>{{ case.priority }}</td>
+              <td>{{case.case_type}}</td>
+              <td>{{ case.created_on|date:"M d,Y H:i:s"}}</td>
+              <td  style="display: none;">{{case.description}}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    <div class="col-md-6 mt-3" >
+      <button type="button" class="btn btn-success" id="selectedrow">Submit</button>
+      <button type="button" class="btn btn-danger" id='closeModal'>Cancel</button>
+    </div>
+  </div> 
+</div>
+{% endif %}
+<input id="countcase" type="hidden" value="{{countcase}}">
+<!-- <input id="totalid" type="hidden"  value="{{totalid}}"> -->
+
+{% endblock %}
+{% block js_block %}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://malsup.github.io/jquery.form.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+<script type="text/javascript">
+$("#id_phone1").bind("keyup keydown", function() {		
+    var mobileNum =  $(this).val()
+    if(mobileNum.length < 7) {
+      $("span.phonealert").html("Enter a valid number");
+      
+    } else {
+      $("span.phonealert").html("");
+    }
+  });
+
+function val() {
+    d = document.getElementById("id_status").value;
+    if (d =="Closed"){
+      document.getElementById('close_dats').style.display = "block";
+    }
+    else{
+      document.getElementById('close_dats').style.display = "none";
+    }
+    
+}
+  var ds = document.getElementById("id_status").value;
+    if (ds =="Closed"){
+      document.getElementById('close_dats').style.display = "block";
+    }
+
+
+  var bar = $('.bar');
+  var percent = $('.percent');
+
+  $('#progress_bar').hide();
+  $('#_id_assigned_to').select2({ disabled: 'readonly' });
+
+  
+
+
+  $('form#submitForm').ajaxForm({
+    type: 'POST',
+    dataType: 'json',
+    url: ".",
+    data: $('#submitForm').serialize(),
+    beforeSubmit: disableButton,
+    beforeSend: function () {
+      var percentVal = '0%';
+      bar.width(percentVal);
+      percent.html(percentVal);
+    },
+    uploadProgress: function (event, position, total, percentComplete) {
+      var percentVal = percentComplete + '%';
+      bar.width(percentVal);
+      if (percentVal == '100%') {
+        percent.html('Uploading ...')
+      }
+      else {
+        percent.html(percentVal);
+      }
+    },
+    success: function (data) {
+      console.log('--------------------------',data)
+      if (data.error) {
+        $('#progress_bar').hide()
+        $('.error_message').html('')
+        for (var key in data.errors) {
+          $('#error_id_' + key).html("<p>" + data.errors[key][0] + "</p>");
+        };
+        $('#submit_btn').removeAttr('disabled')
+      }
+      else {
+        window.location = data.success_url;
+      }
+    }
+  //   span.onclick = function() {
+  //   modal.style.display = "none";
+  // }
+  // percent.html(percentVal);
+  // $('#progress_bar').show();
+    });
+
+
+  function disableButton() {
+    // $('#progress_bar').show()
+    $('#submit_btn').attr('disabled', 'disabled')
+  }
+
+  // $(function () {
+  //   var date = new Date();
+  //   var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  //   $('#id_closed_on').datetimepicker({
+  //     'format': 'YYYY-MM-DD',
+  //     minDate: today
+  //   })
+  // });
+
+  // $(function () {
+  //   var date = new Date();
+  //   var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  //   $('#id_creation_date').datetimepicker({
+  //     'format': 'YYYY-MM-DD',
+  //     minDate: today
+  //   })
+  // });
+
+  // $(function () {
+  //   var date = new Date();
+  //   var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  //   $('#id_assigned_date').datetimepicker({
+  //     'format': 'YYYY-MM-DD',
+  //     minDate: today
+  //   })
+  // });
+
+  $(".savenew").on('click', function (e) {
+    e.preventDefault()
+    $("#save_new_form").val('true')
+    $('#submitForm').submit()
+  });
+  $(document).ready(function () {
+    $('.assigned_users').select2();
+    $("#id_contacts").select2();
+    $("#id_teams").select2();
+  });
+
+  $('#id_account').change(function () {
+    var account = $("#id_account").val()
+    $.get("{% url 'cases:select_contacts' %}", { "account": account }, function (data) {
+      $("#id_contacts").html("")
+      $.each(data, function (index, value) {
+        $("#id_contacts").append("<option value=" + index + ">" + value + "</option>")
+      });
+    })
+  });
+
+  function remove_attachment(x) {
+    const con = confirm("Do you want to Delete it for Sure!?");
+    if (con == true) {
+      $.post('{% url "cases:remove_attachment" %}', {
+        "attachment_id": x
+      }, function (data) {
+        if (data.error) {
+          alert(data.errors)
+        } else {
+          $("#attachment" + data.attachment_object).remove()
+        }
+      })
+    }
+  }
+
+  $("#id_teams").change(function (e) {
+    try {
+      var users = []
+      $('#id_teams option:selected').each(function () {
+        // users.push($(this).attr('data-users'))
+        _data = $(this).attr('data-users');
+        if (!users) {
+          // users = []
+        } else {
+          users = users.concat(_data.split(','))
+        }
+      })
+      // users = $('option:selected', this).attr('data-users')
+      // if (!users) {
+      //   users = []
+      // } else {
+      //   users = users.split(',')
+      // }
+      console.log('selected users teams data', users)
+      var existingUsers = $('#id_assigned_to').val();
+      var allUsers = users.concat(existingUsers)
+      console.log(existingUsers)
+      if (users.length) {
+        $('#_id_assigned_to').select2().val(allUsers).trigger('change');
+
+      }
+    } catch (error) {
+      console.log(error)
+      $('#_id_assigned_to').select2().val(existingUsers).trigger('change');
+    }
+
+  });
+</script>
+<script>
+  // var aid=document.getElementById('totalid').value
+  // window.onload=document.getElementById('case_id').value=aid
+  var nsew = localStorage.getItem('contact')
+
+  if (localStorage.getItem("contact") === null) {
+    var nam = localStorage.getItem('name')
+    var ph = localStorage.getItem('phone')
+    if (localStorage.getItem("name") === null) {
+      console.log('sucess')
+    }
+    else {
+      window.onload = document.getElementById('id_name').value = nam
+      window.onload = document.getElementById('id_phone1').value = ph
+      window.onload = localStorage.removeItem("name")
+      window.onload = localStorage.removeItem("phone")
+    }
+  }
+  else {
+    var nsew1 = localStorage.getItem('contact')
+    var nsew2 = localStorage.getItem('ph')
+    window.onload = document.getElementById('id_name').value = nsew1
+    window.onload = document.getElementById('id_phone1').value = nsew2
+    window.onload = localStorage.removeItem("contact")
+    window.onload = localStorage.removeItem("ph")
+  }
+  // sla timer function start
+
+  var empt = document.getElementById('sla').innerText;
+  if (empt == "00:00:00") {
+    span.onclick = function() {
+  modal.style.display = "none";
+}  }
+  else {
+
+    var t1 = document.getElementById('sla').innerText;
+    console.log("ttttt", t1)
+    var countDownDate = new Date(t1);
+    console.log("-----", countDownDate)
+
+    var x = setInterval(function () {
+      var hh = 'hh'
+      var mm = 'mm'
+      var ss = 'ss'
+      var ti = 'timer'
+      var dis = 'reds'
+      var t2 = document.getElementById('id_status');
+      var strUser = t2.options[t2.selectedIndex].text;
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+      console.log("distance:", distance)
+
+      // Time calculations for days, hours, minutes and seconds
+      var days =  Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours =  ("0" +Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
+    var minutes = ("0" + Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
+    var seconds =  ("0" + Math.floor((distance % (1000 * 60)) / 1000)).slice(-2);
+    console.log(hours,'999999-create')
+
+      // Display the result in the element with id="demo"
+
+      if (strUser == "Closed") {
+        document.getElementById('cass').innerHTML = "Case closed";
+        document.getElementById('cass').style.color = "green";
+        document.getElementById('stitle2').style.display = "block";
+        document.getElementById('stitle1').style.display = "none";
+      }
+      else {
+        document.getElementById(hh).innerHTML = hours
+        document.getElementById(mm).innerHTML = minutes
+        document.getElementById(ss).innerHTML = seconds
+      }
+      if (distance <= 0) {
+        document.getElementById(dis).style.color = "red"
+      }
+      // If the count down is finished, write some text 
+      if (distance < 0) {
+        document.getElementById(dis).style.color = "red"
+        document.getElementById(hh).innerHTML = 00
+        document.getElementById(mm).innerHTML = 00
+        document.getElementById(ss).innerHTML = 00
+      }
+
+    }, 1000);
+  }
+  // sla timer function end
+
+
+</script>
+<script>
+  var modal = document.getElementById("myModal");
+  var span = document.getElementsByClassName("close")[0];
+
+  var parent_case = document.getElementById("id_parent_case");
+  parent_case.style.display = 'block';
+  var cancel = document.getElementById('closeModal');
+  parent_case.onclick = function() {
+    parent_case.style.display = 'none';
+    modal.style.display = "block";
+
+    span.onclick = function() {
+      modal.style.display = "none";
+      parent_case.style.display = 'block';
+    }
+    cancel.onclick = function() {
+      modal.style.display = "none";
+      parent_case.style.display = 'block';
+    }
+  }
+  
+$(document).ready(function() {
+  table =  $('#example').DataTable({
+    columnDefs: [ {
+        orderable: false,
+        className: 'select-checkbox',
+        targets:   0
+    } ],
+    select: {
+        style: 'os'
+    },
+  });
+
+  $('#selectedrow').on('click', function() {
+    var tblData = table.rows('.selected').data();
+    var tmpData;
+    $.each(tblData, function(i, val) {
+      tmpData = tblData[i][2];
+      valData = tblData[i][9];
+
+      nameData = tblData[i][3];
+      console.log(nameData,'nameData')
+      accountData = tblData[i][4];
+      console.log(accountData,'accountData')
+      statusData = tblData[i][5];
+      console.log('statusData',statusData)
+      priorityData = tblData[i][6];
+      console.log('priorityData',priorityData)
+      categoryData = tblData[i][7];
+      console.log('categoryData',categoryData)
+      createdData = tblData[i][8];
+      console.log('createdData',createdData)
+
+
+      var pun = document.getElementById('parent_descpt');
+      pun.style.display = 'block';  
+      // bn = document.getElementById('name1').value
+      // console.log(bn,'--------')
+
+      document.getElementById('id_parent_case').value = tmpData;
+      document.getElementById('id_parent_description').value = valData;
+      modal.style.display = "none";
+      parent_case.style.display = 'block';
+
+      var parentable = document.getElementById('parent_table');
+      parentable.style.display = 'block';
+      document.getElementById('name1').innerText = nameData;
+      document.getElementById('account1').innerText = accountData;
+      document.getElementById('status1').innerText = statusData;
+      document.getElementById('priority1').innerText = priorityData;
+      document.getElementById('category1').innerText = categoryData;
+      document.getElementById('created1').innerText = createdData;
+      
+
+      // localStorage.setItem("parent",tmpData)
+      // alert(tmpData);
+
+    });
+  })
+});
+// function parentCase(){
+// var pcase = localStorage.getItem("parent")
+// alert("ok")
+// document.getElementById('id_parent_case').value = pcase;
+// alert("yes")
+// window.localStorage.removeItem("parent")
+// // $("#crm_parent").hide();
+// modal.style.display = "none";
+
+
+
+// }
+</script>
+<style>
+  .pannel {
+    background: #f1eff1 !important;
+    color: #2a2a2b !important;
+    padding: 0 !important;
+    height: 32px !important;
+    border-color: #ebe9ec !important;
+  }
+
+  .line {
+    margin: 0 0 12px 0 !important;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  .vj {
+    background: url(/static/images/select.ico) no-repeat right #fff !important;
+    /* background-color: #fff; */
+    background-size: 31px 52px !important;
+    color: #65697a !important;
+    padding: 0 52px 0 5px !important;
+    border-color: #a5e8d6 !important;
+    border-style: solid !important;
+    /* border-radius: 4px !important; */
+    line-height: 28px !important;
+    outline: 0 !important;
+    /* height: 28px !important; */
+
+
+  }
+
+  .save {
+    background-color: #00235a !important;
+
+  }
+
+  .save:hover {
+    background-color: #0d8fc7 !important;
+
+  }
+
+  .savenew {
+    border: none !important;
+
+  }
+
+  .clear {
+    background-color: #00235a !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: white !important;
+  }
+
+  .form-control {
+    /* height: calc(1em + .75rem + 2px) !important; */
+  }
+
+  .sla {
+    border: none !important;
+    border-radius: 0 !important;
+    text-align: center;
+    width: 40%;
+  }
+
+  .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 95%;
+}
+
+/* The Close Button */
+.close {
+  color: #000;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #aaaaaa;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.zui-table {
+  width: 100% !important;
+  height: 100%;
+  border: solid 1px #DDEEEE;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font: normal 13px Arial, sans-serif;
+  /* margin-left: 330px !important; */
+
+}
+
+.zui-table thead th {
+  background-color: #DDEFEF;
+  border: solid 1px #DDEEEE;
+  color: #336B6B;
+  padding: 10px;
+  text-align: center;
+  text-shadow: 1px 1px 1px #fff;
+}
+
+.zui-table tbody td {
+  border: solid 1px #DDEEEE;
+  color: #333;
+  padding: 10px;
+  text-shadow: 1px 1px 1px #fff;
+}
+.phonealert {
+  color:red
+}
+
+</style>
+{% endblock js_block %}
